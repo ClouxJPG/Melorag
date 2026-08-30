@@ -9,10 +9,10 @@
       maximum-scale=1,
       user-scalable=no">
 
-<title>Nowcast Radar</title>
+<title>NOWCAST RADAR</title>
 
 <link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
@@ -38,29 +38,32 @@ body{
         Arial,
         sans-serif;
 
-    background:#0b0f14;
-    color:#fff;
+    background:#10151c;
+    color:white;
 }
 
 #map{
     position:absolute;
     inset:0;
-    background:#111820;
 }
 
 
 /* =========================
-   TOP
+   ВЕРХНЯЯ ПАНЕЛЬ
 ========================= */
 
-.top{
+.topbar{
+
     position:absolute;
+
     z-index:1000;
 
     top:12px;
+
     left:50%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     width:min(
         720px,
@@ -69,121 +72,165 @@ body{
 
     min-height:52px;
 
-    padding:8px 12px;
+    padding:
+        8px 13px;
 
     display:flex;
+
     align-items:center;
 
     gap:12px;
 
-    background:rgba(
-        13,
-        17,
-        23,
-        .93
-    );
+    background:
+        rgba(
+            12,
+            16,
+            22,
+            .94
+        );
 
-    border:1px solid
-        rgba(255,255,255,.10);
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .11
+        );
 
     border-radius:15px;
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(15px);
 
     box-shadow:
         0 8px 30px
-        rgba(0,0,0,.30);
+        rgba(
+            0,
+            0,
+            0,
+            .35
+        );
 }
 
 .logo{
+
     font-size:16px;
-    font-weight:750;
+
+    font-weight:800;
 
     white-space:nowrap;
 }
 
-.status{
+.connection{
+
     margin-left:auto;
 
     display:flex;
+
     align-items:center;
 
     gap:7px;
 
-    color:#aab4c1;
-
     font-size:12px;
+
+    color:#aeb8c6;
 }
 
-.dot{
+.status-dot{
+
     width:8px;
+
     height:8px;
 
     border-radius:50%;
 
-    background:#777;
+    background:#f1b64a;
 }
 
-.dot.ok{
-    background:#35d47a;
+.status-dot.ok{
+
+    background:#38d477;
 
     box-shadow:
-        0 0 9px
-        rgba(53,212,122,.8);
+        0 0 10px
+        rgba(
+            56,
+            212,
+            119,
+            .8
+        );
 }
 
-.dot.load{
-    background:#f2b84b;
-}
+.status-dot.error{
 
-.dot.error{
-    background:#ff4d4d;
+    background:#ff4c4c;
 }
 
 
 /* =========================
-   RIGHT PANEL
+   ПРАВАЯ ПАНЕЛЬ
 ========================= */
 
 .panel{
+
     position:absolute;
+
     z-index:1000;
 
     top:76px;
+
     right:12px;
 
     width:235px;
 
     padding:12px;
 
-    background:rgba(
-        13,
-        17,
-        23,
-        .93
-    );
+    background:
+        rgba(
+            12,
+            16,
+            22,
+            .94
+        );
 
-    border:1px solid
-        rgba(255,255,255,.10);
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
 
     border-radius:15px;
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(15px);
 
     box-shadow:
         0 8px 30px
-        rgba(0,0,0,.3);
+        rgba(
+            0,
+            0,
+            0,
+            .35
+        );
 }
 
-.title{
-    font-weight:700;
+.panel-title{
+
     font-size:14px;
+
+    font-weight:750;
 
     margin-bottom:9px;
 }
 
 .layer{
+
     display:flex;
+
     align-items:center;
 
     gap:9px;
@@ -191,31 +238,41 @@ body{
     padding:10px;
 
     background:
-        rgba(255,255,255,.05);
+        rgba(
+            255,
+            255,
+            255,
+            .055
+        );
 
     border-radius:9px;
 }
 
 .layer input{
+
     width:18px;
+
     height:18px;
 }
 
-.layer b{
+.layer-name{
+
     font-size:13px;
+
+    font-weight:700;
 }
 
-.layer small{
-    display:block;
+.layer-desc{
 
-    color:#8d98a7;
+    margin-top:2px;
 
     font-size:10px;
 
-    margin-top:2px;
+    color:#8e99a8;
 }
 
 .buttons{
+
     display:flex;
 
     gap:6px;
@@ -224,121 +281,153 @@ body{
 }
 
 button{
+
     flex:1;
 
+    height:34px;
+
     border:0;
+
     border-radius:9px;
 
-    padding:9px;
+    background:#272f39;
 
-    background:#252c35;
-
-    color:#fff;
+    color:white;
 
     font-size:12px;
-    font-weight:650;
+
+    font-weight:700;
 
     cursor:pointer;
 }
 
 button.primary{
+
     background:#315eea;
 }
 
 button:active{
-    transform:scale(.98);
+
+    transform:
+        scale(.98);
 }
 
 
 /* =========================
-   TIMELINE
+   НИЖНЯЯ ПАНЕЛЬ
 ========================= */
 
 .timeline{
+
     position:absolute;
 
     z-index:1000;
 
+    bottom:12px;
+
     left:50%;
 
-    transform:translateX(-50%);
-
-    bottom:12px;
+    transform:
+        translateX(-50%);
 
     width:min(
         850px,
         calc(100% - 24px)
     );
 
-    padding:11px 13px;
+    padding:
+        11px 13px;
 
-    background:rgba(
-        13,
-        17,
-        23,
-        .94
-    );
+    background:
+        rgba(
+            12,
+            16,
+            22,
+            .95
+        );
 
-    border:1px solid
-        rgba(255,255,255,.10);
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
 
     border-radius:15px;
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(15px);
 
     box-shadow:
         0 8px 30px
-        rgba(0,0,0,.35);
+        rgba(
+            0,
+            0,
+            0,
+            .35
+        );
 }
 
-.time{
+.time-row{
+
     display:flex;
 
-    justify-content:space-between;
+    justify-content:
+        space-between;
 
     align-items:center;
 
     margin-bottom:7px;
 }
 
-.time b{
+.time{
+
     font-size:13px;
+
+    font-weight:750;
 }
 
-.time span{
-    color:#8994a3;
+.frames{
+
+    color:#8995a4;
 
     font-size:11px;
 }
 
 
 /* =========================
-   БОЛЬШОЙ ТОЛСТЫЙ ПОЛЗУНОК
+   БОЛЬШОЙ ПОЛЗУНОК
 ========================= */
 
 #slider{
 
+    appearance:none;
+
+    -webkit-appearance:none;
+
     width:100%;
 
-    height:24px;
+    height:30px;
 
-    margin:2px 0;
+    margin:0;
+
+    background:transparent;
 
     cursor:pointer;
-
-    accent-color:#4775ff;
 }
 
 
-/* Chrome / Safari */
+/* Safari */
 
 #slider::-webkit-slider-runnable-track{
 
-    height:12px;
+    height:16px;
 
-    border-radius:12px;
+    border-radius:16px;
 
-    background:#3a424d;
+    background:#3c4551;
 }
 
 #slider::-webkit-slider-thumb{
@@ -347,20 +436,28 @@ button:active{
 
     appearance:none;
 
-    width:25px;
-    height:25px;
+    width:30px;
 
-    margin-top:-6.5px;
+    height:30px;
+
+    margin-top:-7px;
 
     border-radius:50%;
 
     background:#4775ff;
 
-    border:2px solid #fff;
+    border:
+        2px solid
+        white;
 
     box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.45);
+        0 2px 9px
+        rgba(
+            0,
+            0,
+            0,
+            .5
+        );
 }
 
 
@@ -368,35 +465,35 @@ button:active{
 
 #slider::-moz-range-track{
 
-    height:12px;
+    height:16px;
 
-    border-radius:12px;
+    border-radius:16px;
 
-    background:#3a424d;
+    background:#3c4551;
 }
 
 #slider::-moz-range-thumb{
 
-    width:25px;
-    height:25px;
+    width:30px;
+
+    height:30px;
 
     border-radius:50%;
 
     background:#4775ff;
 
-    border:2px solid #fff;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.45);
+    border:
+        2px solid
+        white;
 }
 
 
 /* =========================
-   CONTROLS
+   КНОПКИ ВРЕМЕНИ
 ========================= */
 
 .controls{
+
     display:flex;
 
     gap:6px;
@@ -405,10 +502,12 @@ button:active{
 }
 
 .controls button{
-    height:34px;
+
+    height:36px;
 }
 
 .play{
+
     flex:1;
 
     background:#315eea;
@@ -416,35 +515,52 @@ button:active{
 
 
 /* =========================
-   LOADING
+   ЗАГРУЗКА
 ========================= */
 
 .loading{
+
     position:absolute;
 
-    z-index:1200;
+    z-index:1500;
 
     top:50%;
+
     left:50%;
 
     transform:
-        translate(-50%,-50%);
+        translate(
+            -50%,
+            -50%
+        );
 
-    padding:12px 17px;
-
-    background:
-        rgba(8,11,15,.94);
+    padding:
+        12px 18px;
 
     border-radius:11px;
+
+    background:
+        rgba(
+            7,
+            10,
+            14,
+            .95
+        );
 
     font-size:13px;
 
     box-shadow:
         0 8px 30px
-        rgba(0,0,0,.3);
+        rgba(
+            0,
+            0,
+            0,
+            .4
+        );
 }
 
 .hidden{
+
     display:none;
 }
 
@@ -455,62 +571,57 @@ button:active{
 
 @media(max-width:600px){
 
-    .top{
+    .topbar{
+
         top:8px;
 
         width:
-            calc(100% - 16px);
+            calc(
+                100% - 16px
+            );
 
         min-height:46px;
     }
 
     .logo{
+
         font-size:14px;
     }
 
-    .status{
+    .connection{
+
         font-size:10px;
     }
 
     .panel{
+
         top:64px;
+
         right:8px;
 
         width:205px;
     }
 
     .timeline{
+
         bottom:8px;
 
         width:
-            calc(100% - 16px);
+            calc(
+                100% - 16px
+            );
 
-        padding:9px 10px;
-    }
-
-    #slider{
-        height:26px;
-    }
-
-    #slider::-webkit-slider-runnable-track{
-        height:12px;
-    }
-
-    #slider::-webkit-slider-thumb{
-        width:26px;
-        height:26px;
+        padding:
+            9px 10px;
     }
 
 }
 
 @media(max-width:390px){
 
-    .status{
-        display:none;
-    }
+    .connection{
 
-    .panel{
-        width:195px;
+        display:none;
     }
 
 }
@@ -525,20 +636,20 @@ button:active{
 
 
 <!-- =========================
-     TOP BAR
+     TOP
 ========================= -->
 
-<div class="top">
+<div class="topbar">
 
     <div class="logo">
         NOWCAST RADAR
     </div>
 
-    <div class="status">
+    <div class="connection">
 
         <span
-            id="dot"
-            class="dot load">
+            id="statusDot"
+            class="status-dot">
         </span>
 
         <span id="status">
@@ -556,46 +667,42 @@ button:active{
 
 <div class="panel">
 
-    <div class="title">
+    <div class="panel-title">
         Радарные слои
     </div>
-
 
     <label class="layer">
 
         <input
-            id="radar"
+            id="radarToggle"
             type="checkbox"
             checked
         >
 
         <div>
 
-            <b>Nowcast DBZ</b>
+            <div class="layer-name">
+                Nowcast DBZ
+            </div>
 
-            <small>
+            <div class="layer-desc">
                 Радиолокационная отражаемость
-            </small>
+            </div>
 
         </div>
 
     </label>
-
 
     <div class="buttons">
 
         <button
             id="refresh"
             class="primary">
-
             Обновить
-
         </button>
 
         <button id="russia">
-
             Россия
-
         </button>
 
     </div>
@@ -611,7 +718,7 @@ button:active{
     id="loading"
     class="loading hidden">
 
-    Загрузка радара...
+    Загрузка...
 
 </div>
 
@@ -622,15 +729,23 @@ button:active{
 
 <div class="timeline">
 
-    <div class="time">
+    <div class="time-row">
 
-        <b id="time">
+        <div
+            id="time"
+            class="time">
+
             Нет данных
-        </b>
 
-        <span id="count">
+        </div>
+
+        <div
+            id="frames"
+            class="frames">
+
             0 кадров
-        </span>
+
+        </div>
 
     </div>
 
@@ -661,6 +776,7 @@ button:active{
 
         <button id="next">
             ▶
+
         </button>
 
     </div>
@@ -676,18 +792,12 @@ src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 <script>
 
 /* =========================================================
-   НАСТРОЙКИ
+   CONFIG
 ========================================================= */
 
 
 /*
- * ВАЖНО:
- *
- * Твой Worker читает:
- *
- * ?url=...
- *
- * поэтому используем именно корень Worker.
+ * ТВОЙ РАБОЧИЙ WORKER
  */
 
 const WORKER =
@@ -695,7 +805,7 @@ const WORKER =
 
 
 /*
- * Nowcast radar layers.
+ * Слои Nowcast.
  */
 
 const LAYERS =
@@ -703,10 +813,8 @@ const LAYERS =
 
 
 /*
- * Рабочий BBOX,
- * который ты получил из Nowcast.
- *
- * EPSG:3857
+ * Тот же BBOX,
+ * на котором ты получил настоящий PNG.
  */
 
 const BBOX = [
@@ -736,18 +844,24 @@ const map =
 
 
 L.tileLayer(
+
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
     {
+
         maxZoom:19,
 
         attribution:
             "© OpenStreetMap contributors"
+
     }
+
 ).addTo(map);
 
 
 /*
- * Начальный центр.
+ * Показываем примерно
+ * нужную область.
  */
 
 map.setView(
@@ -765,9 +879,9 @@ const status =
         "status"
     );
 
-const dot =
+const statusDot =
     document.getElementById(
-        "dot"
+        "statusDot"
     );
 
 const loading =
@@ -780,9 +894,9 @@ const timeBox =
         "time"
     );
 
-const countBox =
+const framesBox =
     document.getElementById(
-        "count"
+        "frames"
     );
 
 const slider =
@@ -792,7 +906,7 @@ const slider =
 
 const radarToggle =
     document.getElementById(
-        "radar"
+        "radarToggle"
     );
 
 
@@ -800,13 +914,13 @@ const radarToggle =
    STATE
 ========================================================= */
 
-let frames = [];
-
-let currentIndex = -1;
-
 let radarLayer = null;
 
 let objectURL = null;
+
+let frames = [];
+
+let currentIndex = -1;
 
 let playing = false;
 
@@ -819,104 +933,61 @@ let playTimer = null;
 
 function setStatus(
     text,
-    type
+    ok = false
 ){
 
     status.textContent =
         text;
 
-    dot.className =
-        "dot " + type;
+    statusDot.className =
+        ok
+        ? "status-dot ok"
+        : "status-dot";
 
 }
 
 
 /* =========================================================
-   CURRENT RADAR TIME
+   MERCATOR → LAT/LON
 ========================================================= */
 
-function getRadarTime(){
-
-    const date =
-        new Date();
-
-
-    /*
-     * Nowcast имеет шаг 10 минут.
-     */
-
-    date.setUTCSeconds(
-        0,
-        0
-    );
-
-
-    date.setUTCMinutes(
-
-        Math.floor(
-            date.getUTCMinutes() /
-            10
-        ) * 10
-
-    );
-
-
-    return date
-        .toISOString()
-        .replace(
-            ".000Z",
-            "Z"
-        );
-
-}
-
-
-/* =========================================================
-   EPSG:3857 → WGS84
-========================================================= */
-
-function xToLon(
+function mercatorXToLon(
     x
 ){
 
     return (
         x /
-        20037508.34
+        20037508.342789244
     ) * 180;
 
 }
 
 
-function yToLat(
+function mercatorYToLat(
     y
 ){
 
-    const degrees =
-        y /
-        20037508.34 *
-        180;
-
-
-    const radians =
-        degrees *
-        Math.PI /
-        180;
-
-
     return (
 
-        180 /
-        Math.PI
+        180 / Math.PI
 
     ) *
 
     (
 
         2 *
+
         Math.atan(
+
             Math.exp(
-                radians
+
+                y /
+                20037508.342789244 *
+                Math.PI /
+                180
+
             )
+
         )
 
         -
@@ -929,20 +1000,20 @@ function yToLat(
 
 
 /*
- * BBOX Nowcast → bounds Leaflet.
+ * BBOX → Leaflet bounds.
  */
 
-function radarBounds(){
+function getRadarBounds(){
 
-    return [
+    return L.latLngBounds(
 
         [
 
-            yToLat(
+            mercatorYToLat(
                 BBOX[1]
             ),
 
-            xToLon(
+            mercatorXToLon(
                 BBOX[0]
             )
 
@@ -950,125 +1021,159 @@ function radarBounds(){
 
         [
 
-            yToLat(
+            mercatorYToLat(
                 BBOX[3]
             ),
 
-            xToLon(
+            mercatorXToLon(
                 BBOX[2]
             )
 
         ]
 
-    ];
+    );
 
 }
 
 
 /* =========================================================
-   NOWCAST GETMAP URL
+   CURRENT TIME
+========================================================= */
+
+function getRadarTime(){
+
+    const d =
+        new Date();
+
+
+    d.setUTCSeconds(
+        0,
+        0
+    );
+
+
+    d.setUTCMinutes(
+
+        Math.floor(
+            d.getUTCMinutes() /
+            10
+        ) * 10
+
+    );
+
+
+    return d
+        .toISOString()
+        .replace(
+            ".000Z",
+            "Z"
+        );
+
+}
+
+
+/* =========================================================
+   GETMAP
 ========================================================= */
 
 function makeGetMapURL(
     time
 ){
 
-    const url =
+    const u =
         new URL(
             "https://www.nowcast.ru/baltrad_wsgi"
         );
 
 
-    url.searchParams.set(
+    u.searchParams.set(
         "REQUEST",
         "GetMap"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "SERVICE",
         "WMS"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "VERSION",
         "1.3.0"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "FORMAT",
         "image/png"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "STYLES",
         ""
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "TRANSPARENT",
         "TRUE"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "LAYERS",
         LAYERS
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "TIME",
         time
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "FORMAT_OPTIONS",
         "dpi:270"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "WIDTH",
         "942"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "HEIGHT",
         "1878"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "CRS",
         "EPSG:3857"
     );
 
-    url.searchParams.set(
+    u.searchParams.set(
         "BBOX",
         BBOX.join(",")
     );
 
 
-    return url.toString();
+    return u.toString();
 
 }
 
 
 /* =========================================================
-   LOAD FRAME
+   LOAD
 ========================================================= */
 
 async function loadRadar(){
 
     try{
 
+        loading.textContent =
+            "Получение Nowcast...";
+
         loading.classList.remove(
             "hidden"
         );
 
-        loading.textContent =
-            "Получение радарных данных...";
-
-
         setStatus(
-            "Загрузка...",
-            "load"
+            "Загрузка..."
         );
 
 
@@ -1076,77 +1181,68 @@ async function loadRadar(){
             getRadarTime();
 
 
-        const targetURL =
+        const target =
             makeGetMapURL(
                 time
             );
 
 
-        /*
-         * GitHub
-         * ↓
-         * Cloudflare Worker
-         * ↓
-         * Nowcast
-         */
-
-        const proxyURL =
+        const workerURL =
             WORKER +
             encodeURIComponent(
-                targetURL
+                target
             );
 
 
         console.log(
-            "NOWCAST:",
-            targetURL
-        );
-
-        console.log(
-            "WORKER:",
-            proxyURL
+            "Worker request:",
+            workerURL
         );
 
 
         const response =
             await fetch(
-                proxyURL,
+                workerURL,
                 {
                     method:"GET",
-
                     cache:"no-store"
                 }
             );
 
 
+        console.log(
+            "Worker status:",
+            response.status
+        );
+
+
         if(!response.ok){
 
+            const text =
+                await response.text();
+
             throw new Error(
-                "Worker HTTP " +
-                response.status
+                "HTTP " +
+                response.status +
+                " — " +
+                text.slice(
+                    0,
+                    200
+                )
             );
 
         }
 
 
-        const contentType =
-            response.headers.get(
-                "content-type"
-            ) || "";
+        const blob =
+            await response.blob();
 
 
         console.log(
-            "Content-Type:",
-            contentType
+            "PNG:",
+            blob.type,
+            blob.size
         );
-
-
-        /*
-         * Получаем настоящий PNG.
-         */
-
-        const blob =
-            await response.blob();
 
 
         if(
@@ -1155,22 +1251,16 @@ async function loadRadar(){
             )
         ){
 
-            /*
-             * Читаем ответ,
-             * чтобы показать ошибку.
-             */
-
             const text =
                 await blob.text();
 
-
             throw new Error(
-                "Nowcast вернул " +
+                "Worker вернул " +
                 blob.type +
                 ": " +
                 text.slice(
                     0,
-                    150
+                    200
                 )
             );
 
@@ -1178,19 +1268,24 @@ async function loadRadar(){
 
 
         /*
-         * Сохраняем кадр.
+         * Добавляем кадр.
          */
 
         const existing =
             frames.findIndex(
-                frame =>
-                    frame.time === time
+                f =>
+                    f.time === time
             );
 
 
         if(
-            existing === -1
+            existing >= 0
         ){
+
+            frames[existing].blob =
+                blob;
+
+        }else{
 
             frames.push({
 
@@ -1200,19 +1295,14 @@ async function loadRadar(){
 
             });
 
-        }else{
-
-            frames[existing].blob =
-                blob;
-
         }
 
 
         /*
-         * Максимум 60 кадров.
+         * Храним максимум 60.
          */
 
-        while(
+        if(
             frames.length > 60
         ){
 
@@ -1226,22 +1316,15 @@ async function loadRadar(){
                 a,
                 b
             ) =>
-
-                new Date(
-                    a.time
-                ) -
-
-                new Date(
-                    b.time
-                )
-
+                new Date(a.time) -
+                new Date(b.time)
         );
 
 
         const index =
             frames.findIndex(
-                frame =>
-                    frame.time === time
+                f =>
+                    f.time === time
             );
 
 
@@ -1252,7 +1335,7 @@ async function loadRadar(){
 
         setStatus(
             "Nowcast подключён",
-            "ok"
+            true
         );
 
 
@@ -1264,19 +1347,16 @@ async function loadRadar(){
     }catch(error){
 
         console.error(
-            "NOWCAST ERROR:",
             error
         );
 
 
         setStatus(
-            "Ошибка",
-            "error"
+            "Ошибка"
         );
 
 
         loading.textContent =
-            "Ошибка: " +
             error.message;
 
 
@@ -1290,7 +1370,7 @@ async function loadRadar(){
 
 
 /* =========================================================
-   DISPLAY FRAME
+   SHOW FRAME
 ========================================================= */
 
 function showFrame(
@@ -1316,11 +1396,12 @@ function showFrame(
 
 
     /*
-     * Удаляем предыдущий
-     * слой.
+     * Удаляем предыдущий.
      */
 
-    if(radarLayer){
+    if(
+        radarLayer
+    ){
 
         map.removeLayer(
             radarLayer
@@ -1329,7 +1410,9 @@ function showFrame(
     }
 
 
-    if(objectURL){
+    if(
+        objectURL
+    ){
 
         URL.revokeObjectURL(
             objectURL
@@ -1345,7 +1428,7 @@ function showFrame(
 
 
     /*
-     * Сам Nowcast PNG.
+     * Реальный PNG Nowcast.
      */
 
     radarLayer =
@@ -1353,13 +1436,15 @@ function showFrame(
 
             objectURL,
 
-            radarBounds(),
+            getRadarBounds(),
 
             {
 
                 opacity:.95,
 
-                interactive:false
+                interactive:false,
+
+                zIndex:500
 
             }
 
@@ -1378,7 +1463,7 @@ function showFrame(
 
 
     /*
-     * Информация о времени.
+     * Время.
      */
 
     timeBox.textContent =
@@ -1404,10 +1489,10 @@ function showFrame(
 
 
     /*
-     * Счётчик кадров.
+     * Количество.
      */
 
-    countBox.textContent =
+    framesBox.textContent =
         (
             index + 1
         ) +
@@ -1459,7 +1544,7 @@ document.getElementById(
 () => {
 
     if(
-        !frames.length
+        frames.length === 0
     ){
 
         return;
@@ -1489,7 +1574,7 @@ document.getElementById(
 () => {
 
     if(
-        !frames.length
+        frames.length === 0
     ){
 
         return;
@@ -1527,7 +1612,9 @@ document.getElementById(
     }
 
 
-    if(playing){
+    if(
+        playing
+    ){
 
         playing =
             false;
@@ -1589,7 +1676,7 @@ document.getElementById(
 
 
 /* =========================================================
-   RADAR TOGGLE
+   TOGGLE
 ========================================================= */
 
 radarToggle.onchange =
@@ -1624,7 +1711,7 @@ radarToggle.onchange =
 
 
 /* =========================================================
-   REFRESH
+   BUTTONS
 ========================================================= */
 
 document.getElementById(
@@ -1632,10 +1719,6 @@ document.getElementById(
 ).onclick =
 loadRadar;
 
-
-/* =========================================================
-   RUSSIA
-========================================================= */
 
 document.getElementById(
     "russia"
@@ -1658,8 +1741,8 @@ loadRadar();
 
 
 /*
- * Проверяем новый кадр
- * раз в 60 секунд.
+ * Автоматическое обновление
+ * текущего кадра.
  */
 
 setInterval(
