@@ -2,6 +2,7 @@ const NOWCAST = "https://www.nowcast.ru";
 
 export default {
   async fetch(request) {
+
     const cors = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
@@ -10,14 +11,22 @@ export default {
     };
 
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: cors });
+      return new Response(null, {
+        status: 204,
+        headers: cors
+      });
     }
 
     try {
-      const incoming = new URL(request.url);
-      const target = incoming.searchParams.get("url");
+
+      const incoming =
+        new URL(request.url);
+
+      const target =
+        incoming.searchParams.get("url");
 
       if (!target) {
+
         return new Response(
           JSON.stringify({
             ok: true,
@@ -28,35 +37,55 @@ export default {
             status: 200,
             headers: {
               ...cors,
-              "Content-Type": "application/json"
+              "Content-Type":
+                "application/json"
             }
           }
         );
+
       }
 
-      const u = new URL(target);
+      const u =
+        new URL(target);
 
-      if (u.hostname !== "www.nowcast.ru") {
-        return new Response("Forbidden target", {
-          status: 403,
-          headers: cors
-        });
+      /*
+       * Разрешаем только Nowcast.
+       */
+
+      if (
+        u.hostname !== "www.nowcast.ru" &&
+        u.hostname !== "nowcast.ru"
+      ) {
+
+        return new Response(
+          "Forbidden target",
+          {
+            status: 403,
+            headers: cors
+          }
+        );
+
       }
 
       /*
-       * Получаем свежий токен
+       * Получаем свежий токен.
        */
-      const tokenResponse = await fetch(
-        NOWCAST + "/get_token",
-        {
-          method: "GET",
-          headers: {
-            "User-Agent": "Mozilla/5.0"
+
+      const tokenResponse =
+        await fetch(
+          NOWCAST + "/get_token",
+          {
+            method: "GET",
+
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0"
+            }
           }
-        }
-      );
+        );
 
       if (!tokenResponse.ok) {
+
         return new Response(
           "Nowcast token error: " +
           tokenResponse.status,
@@ -65,12 +94,14 @@ export default {
             headers: cors
           }
         );
+
       }
 
       const tokenData =
         await tokenResponse.json();
 
       if (!tokenData.token) {
+
         return new Response(
           "Nowcast token missing",
           {
@@ -78,33 +109,42 @@ export default {
             headers: cors
           }
         );
+
       }
 
       /*
-       * Удаляем старый token,
-       * если он был передан.
+       * Убираем старый token.
        */
-      u.searchParams.delete("token");
+
+      u.searchParams.delete(
+        "token"
+      );
 
       /*
-       * Ставим свежий токен.
+       * Добавляем свежий.
        */
+
       u.searchParams.set(
         "token",
         tokenData.token
       );
 
       /*
-       * Запрашиваем настоящий Nowcast PNG.
+       * Запрос к настоящему Nowcast.
        */
+
       const response =
         await fetch(
           u.toString(),
           {
             method: "GET",
+
             headers: {
-              "User-Agent": "Mozilla/5.0",
-              "Accept": "image/png,*/*"
+              "User-Agent":
+                "Mozilla/5.0",
+
+              "Accept":
+                "image/png,image/*,*/*"
             }
           }
         );
@@ -112,15 +152,12 @@ export default {
       const headers =
         new Headers(cors);
 
-      const contentType =
+      headers.set(
+        "Content-Type",
         response.headers.get(
           "content-type"
         ) ||
-        "application/octet-stream";
-
-      headers.set(
-        "Content-Type",
-        contentType
+        "application/octet-stream"
       );
 
       headers.set(
@@ -131,7 +168,9 @@ export default {
       return new Response(
         response.body,
         {
-          status: response.status,
+          status:
+            response.status,
+
           headers
         }
       );
@@ -140,13 +179,15 @@ export default {
 
       return new Response(
         JSON.stringify({
-          ok: false,
-          error: String(error)
+          ok:false,
+          error:String(error)
         }),
         {
-          status: 500,
-          headers: {
+          status:500,
+
+          headers:{
             ...cors,
+
             "Content-Type":
               "application/json"
           }
@@ -154,5 +195,6 @@ export default {
       );
 
     }
+
   }
 };
