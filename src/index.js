@@ -1,8 +1,11 @@
+const NOWCAST = "https://www.nowcast.ru";
+
 export default {
   async fetch(request) {
     const cors = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "*",
       "Cache-Control": "no-store"
     };
 
@@ -10,66 +13,146 @@ export default {
       return new Response(null, { headers: cors });
     }
 
-    const url = new URL(request.url);
-
-    if (url.pathname === "/") {
-      return new Response("Nowcast Worker OK", {
-        headers: {
-          ...cors,
-          "Content-Type": "text/plain; charset=UTF-8"
-        }
-      });
-    }
-
-    if (url.pathname !== "/nowcast") {
-      return new Response("Not found", {
-        status: 404,
-        headers: cors
-      });
-    }
-
-    const target = url.searchParams.get("url");
-
-    if (!target) {
-      return new Response("Missing ?url=", {
-        status: 400,
-        headers: cors
-      });
-    }
-
-    let targetURL;
-
     try {
-      targetURL = new URL(target);
-    } catch {
-      return new Response("Invalid URL", {
-        status: 400,
-        headers: cors
-      });
+      const incoming = new URL(request.url);
+      const target = incoming.searchParams.get("url");
+
+      if (!target) {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            worker: "melorag",
+            nowcast: "proxy-ready"
+          }),
+          {
+            status: 200,
+            headers: {
+              ...cors,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+      }
+
+      const u = new URL(target);
+
+      if (u.hostname !== "www.nowcast.ru") {
+        return new Response("Forbidden target", {
+          status: 403,
+          headers: cors
+        });
+      }
+
+      /*
+       * Получаем свежий токен
+       */
+      const tokenResponse = await fetch(
+        NOWCAST + "/get_token",
+        {
+          method: "GET",
+          headers: {
+            "User-Agent": "Mozilla/5.0"
+          }
+        }
+      );
+
+      if (!tokenResponse.ok) {
+        return new Response(
+          "Nowcast token error: " +
+          tokenResponse.status,
+          {
+            status: 502,
+            headers: cors
+          }
+        );
+      }
+
+      const tokenData =
+        await tokenResponse.json();
+
+      if (!tokenData.token) {
+        return new Response(
+          "Nowcast token missing",
+          {
+            status: 502,
+            headers: cors
+          }
+        );
+      }
+
+      /*
+       * Удаляем старый token,
+       * если он был передан.
+       */
+      u.searchParams.delete("token");
+
+      /*
+       * Ставим свежий токен.
+       */
+      u.searchParams.set(
+        "token",
+        tokenData.token
+      );
+
+      /*
+       * Запрашиваем настоящий Nowcast PNG.
+       */
+      const response =
+        await fetch(
+          u.toString(),
+          {
+            method: "GET",
+            headers: {
+              "User-Agent": "Mozilla/5.0",
+              "Accept": "image/png,*/*"
+            }
+          }
+        );
+
+      const headers =
+        new Headers(cors);
+
+      const contentType =
+        response.headers.get(
+          "content-type"
+        ) ||
+        "application/octet-stream";
+
+      headers.set(
+        "Content-Type",
+        contentType
+      );
+
+      headers.set(
+        "Cache-Control",
+        "no-store"
+      );
+
+      return new Response(
+        response.body,
+        {
+          status: response.status,
+          headers
+        }
+      );
+
+    } catch (error) {
+
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: String(error)
+        }),
+        {
+          status: 500,
+          headers: {
+            ...cors,
+            "Content-Type":
+              "application/json"
+          }
+        }
+      );
+
     }
-
-    if (
-      targetURL.protocol !== "https:" ||
-      targetURL.hostname !== "www.nowcast.ru" ||
-      targetURL.pathname !== "/baltrad_wsgi"
-    ) {
-      return new Response("Forbidden target", {
-        status: 403,
-        headers: cors
-      });
-    }
-
-    const r = await fetch(targetURL.toString());
-
-    const headers = new Headers(cors);
-    headers.set(
-      "Content-Type",
-      r.headers.get("Content-Type") || "application/octet-stream"
-    );
-
-    return new Response(r.body, {
-      status: r.status,
-      headers
-    });
   }
 };
