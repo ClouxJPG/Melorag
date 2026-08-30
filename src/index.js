@@ -1,39 +1,40 @@
 export default {
   async fetch(request) {
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Cache-Control": "no-store"
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: cors });
+    }
+
     const url = new URL(request.url);
 
     if (url.pathname === "/") {
       return new Response("Nowcast Worker OK", {
         headers: {
+          ...cors,
           "Content-Type": "text/plain; charset=UTF-8"
         }
       });
     }
 
-    if (url.pathname === "/test") {
-      return new Response(
-        JSON.stringify({
-          ok: true,
-          worker: "melorag",
-          nowcast: "proxy-ready"
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*"
-          }
-        }
-      );
-    }
-
     if (url.pathname !== "/nowcast") {
-      return new Response("Not found", { status: 404 });
+      return new Response("Not found", {
+        status: 404,
+        headers: cors
+      });
     }
 
     const target = url.searchParams.get("url");
 
     if (!target) {
-      return new Response("Missing url parameter", { status: 400 });
+      return new Response("Missing ?url=", {
+        status: 400,
+        headers: cors
+      });
     }
 
     let targetURL;
@@ -41,7 +42,10 @@ export default {
     try {
       targetURL = new URL(target);
     } catch {
-      return new Response("Invalid URL", { status: 400 });
+      return new Response("Invalid URL", {
+        status: 400,
+        headers: cors
+      });
     }
 
     if (
@@ -49,21 +53,22 @@ export default {
       targetURL.hostname !== "www.nowcast.ru" ||
       targetURL.pathname !== "/baltrad_wsgi"
     ) {
-      return new Response("Forbidden target", { status: 403 });
+      return new Response("Forbidden target", {
+        status: 403,
+        headers: cors
+      });
     }
 
-    const response = await fetch(targetURL.toString(), {
-      method: "GET"
-    });
+    const r = await fetch(targetURL.toString());
 
-    const headers = new Headers(response.headers);
+    const headers = new Headers(cors);
+    headers.set(
+      "Content-Type",
+      r.headers.get("Content-Type") || "application/octet-stream"
+    );
 
-    headers.set("Access-Control-Allow-Origin", "*");
-    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-    headers.set("Cache-Control", "no-store");
-
-    return new Response(response.body, {
-      status: response.status,
+    return new Response(r.body, {
+      status: r.status,
       headers
     });
   }
