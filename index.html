@@ -50,7 +50,7 @@ body{
 
 
 /* =========================
-   TOP BAR
+   TOP
 ========================= */
 
 .top{
@@ -129,7 +129,7 @@ body{
 
     box-shadow:
         0 0 9px
-        #35d47a;
+        rgba(53,212,122,.8);
 }
 
 .dot.load{
@@ -237,6 +237,8 @@ button{
 
     font-size:12px;
     font-weight:650;
+
+    cursor:pointer;
 }
 
 button.primary{
@@ -310,15 +312,15 @@ button:active{
 }
 
 
-/*
-   УВЕЛИЧЕННЫЙ ПОЛЗУНОК
-*/
+/* =========================
+   БОЛЬШОЙ ТОЛСТЫЙ ПОЛЗУНОК
+========================= */
 
 #slider{
 
     width:100%;
 
-    height:18px;
+    height:24px;
 
     margin:2px 0;
 
@@ -328,32 +330,16 @@ button:active{
 }
 
 
-/*
-   Делаем сам трек толще.
-*/
+/* Chrome / Safari */
 
 #slider::-webkit-slider-runnable-track{
 
-    height:8px;
+    height:12px;
 
-    border-radius:8px;
-
-    background:#3a424d;
-}
-
-#slider::-moz-range-track{
-
-    height:8px;
-
-    border-radius:8px;
+    border-radius:12px;
 
     background:#3a424d;
 }
-
-
-/*
-   Большой бегунок.
-*/
 
 #slider::-webkit-slider-thumb{
 
@@ -361,10 +347,10 @@ button:active{
 
     appearance:none;
 
-    width:20px;
-    height:20px;
+    width:25px;
+    height:25px;
 
-    margin-top:-6px;
+    margin-top:-6.5px;
 
     border-radius:50%;
 
@@ -374,13 +360,25 @@ button:active{
 
     box-shadow:
         0 2px 8px
-        rgba(0,0,0,.4);
+        rgba(0,0,0,.45);
+}
+
+
+/* Firefox */
+
+#slider::-moz-range-track{
+
+    height:12px;
+
+    border-radius:12px;
+
+    background:#3a424d;
 }
 
 #slider::-moz-range-thumb{
 
-    width:20px;
-    height:20px;
+    width:25px;
+    height:25px;
 
     border-radius:50%;
 
@@ -390,9 +388,13 @@ button:active{
 
     box-shadow:
         0 2px 8px
-        rgba(0,0,0,.4);
+        rgba(0,0,0,.45);
 }
 
+
+/* =========================
+   CONTROLS
+========================= */
 
 .controls{
     display:flex;
@@ -486,6 +488,19 @@ button:active{
         padding:9px 10px;
     }
 
+    #slider{
+        height:26px;
+    }
+
+    #slider::-webkit-slider-runnable-track{
+        height:12px;
+    }
+
+    #slider::-webkit-slider-thumb{
+        width:26px;
+        height:26px;
+    }
+
 }
 
 @media(max-width:390px){
@@ -510,7 +525,7 @@ button:active{
 
 
 <!-- =========================
-     TOP
+     TOP BAR
 ========================= -->
 
 <div class="top">
@@ -536,7 +551,7 @@ button:active{
 
 
 <!-- =========================
-     PANEL
+     RIGHT PANEL
 ========================= -->
 
 <div class="panel">
@@ -572,11 +587,15 @@ button:active{
         <button
             id="refresh"
             class="primary">
+
             Обновить
+
         </button>
 
         <button id="russia">
+
             Россия
+
         </button>
 
     </div>
@@ -657,26 +676,49 @@ src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 <script>
 
 /* =========================================================
-   CONFIG
+   НАСТРОЙКИ
 ========================================================= */
 
-const WORKER =
-    "https://melorag.mmts2678.workers.dev/nowcast?url=";
 
+/*
+ * ВАЖНО:
+ *
+ * Твой Worker читает:
+ *
+ * ?url=...
+ *
+ * поэтому используем именно корень Worker.
+ */
+
+const WORKER =
+    "https://melorag.mmts2678.workers.dev/?url=";
+
+
+/*
+ * Nowcast radar layers.
+ */
 
 const LAYERS =
     "bufr_dbz1,bufr_novosib_dbz1,bufr_vlad_dbz1";
 
 
 /*
-   Проверенный BBOX Nowcast.
-*/
+ * Рабочий BBOX,
+ * который ты получил из Nowcast.
+ *
+ * EPSG:3857
+ */
 
 const BBOX = [
+
     3779329.325563706,
+
     6713602.321820984,
+
     4547368.585773157,
+
     8244788.872429635
+
 ];
 
 
@@ -688,15 +730,10 @@ const map =
     L.map(
         "map",
         {
-            zoomControl:true,
-            attributionControl:true
+            zoomControl:true
         }
     );
 
-
-/*
-   Обычная карта без API-ключа.
-*/
 
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -710,8 +747,8 @@ L.tileLayer(
 
 
 /*
-   Начальная позиция.
-*/
+ * Начальный центр.
+ */
 
 map.setView(
     [57,80],
@@ -790,18 +827,23 @@ function setStatus(
 
     dot.className =
         "dot " + type;
+
 }
 
 
 /* =========================================================
-   TIME
+   CURRENT RADAR TIME
 ========================================================= */
 
-function radarTime(){
+function getRadarTime(){
 
     const date =
         new Date();
 
+
+    /*
+     * Nowcast имеет шаг 10 минут.
+     */
 
     date.setUTCSeconds(
         0,
@@ -810,10 +852,12 @@ function radarTime(){
 
 
     date.setUTCMinutes(
+
         Math.floor(
             date.getUTCMinutes() /
             10
         ) * 10
+
     );
 
 
@@ -823,11 +867,12 @@ function radarTime(){
             ".000Z",
             "Z"
         );
+
 }
 
 
 /* =========================================================
-   MERCATOR → LAT/LON
+   EPSG:3857 → WGS84
 ========================================================= */
 
 function xToLon(
@@ -859,28 +904,40 @@ function yToLat(
 
 
     return (
+
         180 /
         Math.PI
+
     ) *
+
     (
+
         2 *
         Math.atan(
             Math.exp(
                 radians
             )
         )
+
         -
+
         Math.PI / 2
+
     );
 
 }
 
+
+/*
+ * BBOX Nowcast → bounds Leaflet.
+ */
 
 function radarBounds(){
 
     return [
 
         [
+
             yToLat(
                 BBOX[1]
             ),
@@ -888,9 +945,11 @@ function radarBounds(){
             xToLon(
                 BBOX[0]
             )
+
         ],
 
         [
+
             yToLat(
                 BBOX[3]
             ),
@@ -898,6 +957,7 @@ function radarBounds(){
             xToLon(
                 BBOX[2]
             )
+
         ]
 
     ];
@@ -906,10 +966,10 @@ function radarBounds(){
 
 
 /* =========================================================
-   GETMAP
+   NOWCAST GETMAP URL
 ========================================================= */
 
-function getMapURL(
+function makeGetMapURL(
     time
 ){
 
@@ -991,7 +1051,7 @@ function getMapURL(
 
 
 /* =========================================================
-   LOAD RADAR
+   LOAD FRAME
 ========================================================= */
 
 async function loadRadar(){
@@ -1003,7 +1063,7 @@ async function loadRadar(){
         );
 
         loading.textContent =
-            "Загрузка Nowcast...";
+            "Получение радарных данных...";
 
 
         setStatus(
@@ -1013,23 +1073,47 @@ async function loadRadar(){
 
 
         const time =
-            radarTime();
+            getRadarTime();
 
 
-        const target =
-            getMapURL(
+        const targetURL =
+            makeGetMapURL(
                 time
             );
 
 
+        /*
+         * GitHub
+         * ↓
+         * Cloudflare Worker
+         * ↓
+         * Nowcast
+         */
+
+        const proxyURL =
+            WORKER +
+            encodeURIComponent(
+                targetURL
+            );
+
+
+        console.log(
+            "NOWCAST:",
+            targetURL
+        );
+
+        console.log(
+            "WORKER:",
+            proxyURL
+        );
+
+
         const response =
             await fetch(
-                WORKER +
-                encodeURIComponent(
-                    target
-                ),
-
+                proxyURL,
                 {
+                    method:"GET",
+
                     cache:"no-store"
                 }
             );
@@ -1045,6 +1129,22 @@ async function loadRadar(){
         }
 
 
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+
+        console.log(
+            "Content-Type:",
+            contentType
+        );
+
+
+        /*
+         * Получаем настоящий PNG.
+         */
+
         const blob =
             await response.blob();
 
@@ -1055,18 +1155,31 @@ async function loadRadar(){
             )
         ){
 
+            /*
+             * Читаем ответ,
+             * чтобы показать ошибку.
+             */
+
+            const text =
+                await blob.text();
+
+
             throw new Error(
-                "Получен не PNG: " +
-                blob.type
+                "Nowcast вернул " +
+                blob.type +
+                ": " +
+                text.slice(
+                    0,
+                    150
+                )
             );
 
         }
 
 
         /*
-           Не удаляем старые кадры,
-           пока не проверили новый.
-        */
+         * Сохраняем кадр.
+         */
 
         const existing =
             frames.findIndex(
@@ -1075,11 +1188,16 @@ async function loadRadar(){
             );
 
 
-        if(existing === -1){
+        if(
+            existing === -1
+        ){
 
             frames.push({
+
                 time:time,
+
                 blob:blob
+
             });
 
         }else{
@@ -1091,8 +1209,8 @@ async function loadRadar(){
 
 
         /*
-           Максимум 60 кадров.
-        */
+         * Максимум 60 кадров.
+         */
 
         while(
             frames.length > 60
@@ -1108,8 +1226,15 @@ async function loadRadar(){
                 a,
                 b
             ) =>
-                new Date(a.time) -
-                new Date(b.time)
+
+                new Date(
+                    a.time
+                ) -
+
+                new Date(
+                    b.time
+                )
+
         );
 
 
@@ -1139,12 +1264,13 @@ async function loadRadar(){
     }catch(error){
 
         console.error(
+            "NOWCAST ERROR:",
             error
         );
 
 
         setStatus(
-            "Ошибка загрузки",
+            "Ошибка",
             "error"
         );
 
@@ -1164,7 +1290,7 @@ async function loadRadar(){
 
 
 /* =========================================================
-   SHOW FRAME
+   DISPLAY FRAME
 ========================================================= */
 
 function showFrame(
@@ -1188,6 +1314,11 @@ function showFrame(
     const frame =
         frames[index];
 
+
+    /*
+     * Удаляем предыдущий
+     * слой.
+     */
 
     if(radarLayer){
 
@@ -1213,6 +1344,10 @@ function showFrame(
         );
 
 
+    /*
+     * Сам Nowcast PNG.
+     */
+
     radarLayer =
         L.imageOverlay(
 
@@ -1221,8 +1356,11 @@ function showFrame(
             radarBounds(),
 
             {
-                opacity:.92,
+
+                opacity:.95,
+
                 interactive:false
+
             }
 
         );
@@ -1239,22 +1377,35 @@ function showFrame(
     }
 
 
+    /*
+     * Информация о времени.
+     */
+
     timeBox.textContent =
         new Date(
             frame.time
         ).toLocaleString(
             "ru-RU",
             {
+
                 day:"2-digit",
+
                 month:"2-digit",
+
                 hour:"2-digit",
+
                 minute:"2-digit",
 
                 timeZone:"UTC"
+
             }
         ) +
         " UTC";
 
+
+    /*
+     * Счётчик кадров.
+     */
 
     countBox.textContent =
         (
@@ -1264,12 +1415,15 @@ function showFrame(
         frames.length;
 
 
+    /*
+     * Ползунок.
+     */
+
     slider.max =
         Math.max(
             0,
             frames.length - 1
         );
-
 
     slider.value =
         index;
@@ -1304,15 +1458,22 @@ document.getElementById(
 ).onclick =
 () => {
 
-    if(!frames.length)
+    if(
+        !frames.length
+    ){
+
         return;
+
+    }
 
 
     showFrame(
+
         Math.max(
             0,
             currentIndex - 1
         )
+
     );
 
 };
@@ -1327,15 +1488,22 @@ document.getElementById(
 ).onclick =
 () => {
 
-    if(!frames.length)
+    if(
+        !frames.length
+    ){
+
         return;
+
+    }
 
 
     showFrame(
+
         Math.min(
             frames.length - 1,
             currentIndex + 1
         )
+
     );
 
 };
@@ -1427,8 +1595,13 @@ document.getElementById(
 radarToggle.onchange =
 () => {
 
-    if(!radarLayer)
+    if(
+        !radarLayer
+    ){
+
         return;
+
+    }
 
 
     if(
@@ -1451,14 +1624,18 @@ radarToggle.onchange =
 
 
 /* =========================================================
-   BUTTONS
+   REFRESH
 ========================================================= */
 
 document.getElementById(
     "refresh"
 ).onclick =
-    loadRadar;
+loadRadar;
 
+
+/* =========================================================
+   RUSSIA
+========================================================= */
 
 document.getElementById(
     "russia"
@@ -1481,8 +1658,9 @@ loadRadar();
 
 
 /*
-   Автообновление.
-*/
+ * Проверяем новый кадр
+ * раз в 60 секунд.
+ */
 
 setInterval(
     loadRadar,
