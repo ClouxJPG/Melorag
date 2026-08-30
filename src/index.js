@@ -24,12 +24,9 @@ export default {
       return new Response("Forbidden target", { status: 403 });
     }
 
-    const response = await fetch(target, {
-      method: "GET"
-    });
+    const response = await fetch(target);
 
     const headers = new Headers(response.headers);
-
     headers.set("Access-Control-Allow-Origin", "*");
     headers.set("Cache-Control", "no-store");
 
