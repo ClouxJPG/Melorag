@@ -2,22 +2,47 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1,
+             maximum-scale=1,
+             user-scalable=no"
+>
+
 <title>Nowcast Radar</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 
-html,body,#map{
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body,
+#map{
     width:100%;
     height:100%;
     overflow:hidden;
 }
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
     background:#0b0f14;
     color:#fff;
 }
@@ -25,225 +50,432 @@ body{
 #map{
     position:absolute;
     inset:0;
-    background:#111820;
+    background:#d9d9d9;
 }
 
-/* Верхняя панель */
+/* =========================
+   TOP BAR
+========================= */
 
-.top{
+.topbar{
     position:absolute;
+
     z-index:1000;
+
     top:12px;
     left:50%;
+
     transform:translateX(-50%);
-    width:min(720px,calc(100% - 24px));
+
+    width:min(
+        720px,
+        calc(100% - 24px)
+    );
+
     min-height:52px;
-    padding:8px 12px;
 
     display:flex;
     align-items:center;
+
     gap:12px;
 
-    background:rgba(13,17,23,.93);
-    border:1px solid rgba(255,255,255,.10);
+    padding:8px 13px;
+
+    background:rgba(
+        13,
+        17,
+        23,
+        .94
+    );
+
+    border:1px solid
+        rgba(255,255,255,.11);
+
     border-radius:15px;
 
-    backdrop-filter:blur(14px);
-    box-shadow:0 8px 30px rgba(0,0,0,.3);
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.30);
+
+    backdrop-filter:
+        blur(15px);
 }
 
 .logo{
     font-size:16px;
     font-weight:750;
+
     white-space:nowrap;
 }
 
 .status{
     margin-left:auto;
+
     display:flex;
     align-items:center;
+
     gap:7px;
-    color:#aab4c1;
+
+    color:#aeb7c4;
+
     font-size:12px;
+
+    white-space:nowrap;
 }
 
-.dot{
+.status-dot{
     width:8px;
     height:8px;
+
     border-radius:50%;
+
     background:#777;
 }
 
-.dot.ok{
-    background:#35d47a;
-    box-shadow:0 0 9px #35d47a;
+.status-dot.ok{
+    background:#32d477;
+
+    box-shadow:
+        0 0 9px
+        rgba(50,212,119,.75);
 }
 
-.dot.load{
+.status-dot.loading{
     background:#f2b84b;
+
+    box-shadow:
+        0 0 9px
+        rgba(242,184,75,.55);
 }
 
-/* Панель */
+.status-dot.error{
+    background:#ff5252;
+
+    box-shadow:
+        0 0 9px
+        rgba(255,82,82,.55);
+}
+
+/* =========================
+   CONTROL PANEL
+========================= */
 
 .panel{
     position:absolute;
+
     z-index:1000;
-    top:76px;
+
+    top:77px;
     right:12px;
 
-    width:235px;
+    width:240px;
+
     padding:12px;
 
-    background:rgba(13,17,23,.93);
-    border:1px solid rgba(255,255,255,.10);
+    background:rgba(
+        13,
+        17,
+        23,
+        .94
+    );
+
+    border:1px solid
+        rgba(255,255,255,.10);
+
     border-radius:15px;
 
-    backdrop-filter:blur(14px);
-    box-shadow:0 8px 30px rgba(0,0,0,.3);
+    box-shadow:
+        0 9px 30px
+        rgba(0,0,0,.32);
+
+    backdrop-filter:
+        blur(15px);
 }
 
-.title{
-    font-weight:700;
+.panel-title{
     font-size:14px;
+    font-weight:700;
+
     margin-bottom:9px;
 }
 
 .layer{
     display:flex;
     align-items:center;
+
     gap:9px;
 
     padding:10px;
 
-    background:rgba(255,255,255,.05);
     border-radius:9px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    cursor:pointer;
 }
 
 .layer input{
     width:18px;
     height:18px;
+
+    flex:none;
 }
 
-.layer b{
+.layer-name{
     font-size:13px;
+    font-weight:650;
 }
 
-.layer small{
-    display:block;
-    color:#8d98a7;
-    font-size:10px;
+.layer-description{
     margin-top:2px;
+
+    color:#8d98a7;
+
+    font-size:10px;
 }
 
 .buttons{
     display:flex;
+
     gap:6px;
+
     margin-top:8px;
 }
 
-button{
+.control-button{
     flex:1;
+
     border:0;
+
     border-radius:9px;
-    padding:9px;
+
+    padding:10px 8px;
 
     background:#252c35;
+
     color:#fff;
 
     font-size:12px;
+
     font-weight:650;
+
+    cursor:pointer;
 }
 
-button.primary{
+.control-button.primary{
     background:#315eea;
 }
 
-/* Таймлайн */
-
-.timeline{
-    position:absolute;
-    z-index:1000;
-
-    left:50%;
-    transform:translateX(-50%);
-    bottom:12px;
-
-    width:min(850px,calc(100% - 24px));
-
-    padding:11px 13px;
-
-    background:rgba(13,17,23,.94);
-    border:1px solid rgba(255,255,255,.10);
-    border-radius:15px;
-
-    backdrop-filter:blur(14px);
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+.control-button:active{
+    transform:scale(.98);
 }
 
-.time{
-    display:flex;
-    justify-content:space-between;
+/* =========================
+   LEGEND
+========================= */
+
+.legend{
+    margin-top:11px;
+}
+
+.legend-title{
+    color:#9ca7b5;
+
+    font-size:11px;
+
     margin-bottom:6px;
 }
 
-.time b{
-    font-size:13px;
+.legend-bar{
+    width:100%;
+    height:11px;
+
+    border-radius:6px;
+
+    background:
+        linear-gradient(
+            90deg,
+
+            #303030 0%,
+            #168cff 15%,
+            #00d88b 30%,
+            #f1e900 48%,
+            #ff9d00 63%,
+            #ff3500 78%,
+            #ff00c8 90%,
+            #ffffff 100%
+        );
 }
 
-.time span{
+.legend-values{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:3px;
+
+    color:#8f99a7;
+
+    font-size:9px;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline{
+    position:absolute;
+
+    z-index:1000;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    bottom:12px;
+
+    width:min(
+        850px,
+        calc(100% - 24px)
+    );
+
+    padding:11px 13px;
+
+    background:rgba(
+        13,
+        17,
+        23,
+        .95
+    );
+
+    border:1px solid
+        rgba(255,255,255,.10);
+
+    border-radius:15px;
+
+    box-shadow:
+        0 9px 30px
+        rgba(0,0,0,.34);
+
+    backdrop-filter:
+        blur(15px);
+}
+
+.time-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:6px;
+}
+
+.time-main{
+    font-size:13px;
+    font-weight:700;
+}
+
+.time-count{
     color:#8994a3;
     font-size:11px;
 }
 
-input[type=range]{
+#timelineSlider{
     width:100%;
+
     accent-color:#4775ff;
+
+    cursor:pointer;
 }
 
-.controls{
+.timeline-controls{
     display:flex;
+
     gap:6px;
-    margin-top:7px;
+
+    margin-top:8px;
 }
 
-.controls button{
+.timeline-button{
     height:34px;
+
+    min-width:38px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:#252c35;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:650;
+
+    cursor:pointer;
 }
 
-.play{
+.timeline-button.play{
     flex:1;
+
     background:#315eea;
 }
 
-/* Загрузка */
+/* =========================
+   LOADING
+========================= */
 
 .loading{
     position:absolute;
+
     z-index:1200;
-    top:50%;
+
     left:50%;
-    transform:translate(-50%,-50%);
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
 
     padding:12px 17px;
 
-    background:rgba(8,11,15,.94);
     border-radius:11px;
 
+    background:
+        rgba(8,11,15,.94);
+
+    color:#e2e8f0;
+
     font-size:13px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.35);
+
+    pointer-events:none;
 }
 
-.hidden{
+.loading.hidden{
     display:none;
 }
 
-/* Мобильный интерфейс */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:600px){
 
-    .top{
+    .topbar{
         top:8px;
-        width:calc(100% - 16px);
+
+        width:
+            calc(100% - 16px);
+
         min-height:46px;
+
+        border-radius:14px;
     }
 
     .logo{
@@ -257,14 +489,23 @@ input[type=range]{
     .panel{
         top:64px;
         right:8px;
-        width:205px;
+
+        width:210px;
+
+        border-radius:14px;
     }
 
     .timeline{
         bottom:8px;
-        width:calc(100% - 16px);
+
+        width:
+            calc(100% - 16px);
+
         padding:9px 10px;
+
+        border-radius:14px;
     }
+
 }
 
 @media(max-width:390px){
@@ -274,17 +515,32 @@ input[type=range]{
     }
 
     .panel{
-        width:195px;
+        width:198px;
     }
+
+    .legend{
+        display:none;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- =========================
+     MAP
+========================= -->
+
 <div id="map"></div>
 
-<div class="top">
+
+<!-- =========================
+     TOP
+========================= -->
+
+<div class="topbar">
 
     <div class="logo">
         NOWCAST RADAR
@@ -293,11 +549,11 @@ input[type=range]{
     <div class="status">
 
         <span
-            id="dot"
-            class="dot"
+            id="statusDot"
+            class="status-dot loading"
         ></span>
 
-        <span id="status">
+        <span id="statusText">
             Подключение...
         </span>
 
@@ -306,44 +562,102 @@ input[type=range]{
 </div>
 
 
+<!-- =========================
+     PANEL
+========================= -->
+
 <div class="panel">
 
-    <div class="title">
+    <div class="panel-title">
         Радарные слои
     </div>
 
     <label class="layer">
 
         <input
-            id="radar"
+            id="radarToggle"
             type="checkbox"
             checked
         >
 
         <div>
-            <b>Nowcast DBZ</b>
-            <small>Радиолокационная отражаемость</small>
+
+            <div class="layer-name">
+                Nowcast DBZ
+            </div>
+
+            <div class="layer-description">
+                Радиолокационная отражаемость
+            </div>
+
         </div>
 
     </label>
 
+
     <div class="buttons">
 
         <button
-            class="primary"
-            id="refresh"
+            id="refreshButton"
+            class="control-button primary"
         >
             Обновить
         </button>
 
-        <button id="russia">
+        <button
+            id="russiaButton"
+            class="control-button"
+        >
             Россия
         </button>
 
     </div>
 
+
+    <div class="buttons">
+
+        <button
+            id="locationButton"
+            class="control-button"
+        >
+            Моя позиция
+        </button>
+
+        <button
+            id="fullscreenButton"
+            class="control-button"
+        >
+            Полный экран
+        </button>
+
+    </div>
+
+
+    <div class="legend">
+
+        <div class="legend-title">
+            Отражаемость, dBZ
+        </div>
+
+        <div class="legend-bar"></div>
+
+        <div class="legend-values">
+
+            <span>0</span>
+            <span>20</span>
+            <span>40</span>
+            <span>60+</span>
+
+        </div>
+
+    </div>
+
 </div>
 
+
+<!-- =========================
+     LOADING
+========================= -->
 
 <div
     id="loading"
@@ -353,42 +667,61 @@ input[type=range]{
 </div>
 
 
+<!-- =========================
+     TIMELINE
+========================= -->
+
 <div class="timeline">
 
-    <div class="time">
+    <div class="time-row">
 
-        <b id="time">
+        <div
+            id="timeMain"
+            class="time-main"
+        >
             Нет данных
-        </b>
+        </div>
 
-        <span id="count">
+        <div
+            id="timeCount"
+            class="time-count"
+        >
             0 кадров
-        </span>
+        </div>
 
     </div>
 
+
     <input
-        id="slider"
+        id="timelineSlider"
         type="range"
         min="0"
         max="0"
         value="0"
+        step="1"
     >
 
-    <div class="controls">
 
-        <button id="prev">
+    <div class="timeline-controls">
+
+        <button
+            id="previousButton"
+            class="timeline-button"
+        >
             ◀
         </button>
 
         <button
-            id="play"
-            class="play"
+            id="playButton"
+            class="timeline-button play"
         >
             ▶ Воспроизвести
         </button>
 
-        <button id="next">
+        <button
+            id="nextButton"
+            class="timeline-button"
+        >
             ▶
         </button>
 
@@ -397,192 +730,415 @@ input[type=range]{
 </div>
 
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 
 <script>
 
-const WORKER =
-"https://melorag.mmts2678.workers.dev/nowcast?url=";
+/* =========================================================
+   CONFIG
+========================================================= */
 
-const LAYERS =
-"bufr_dbz1,bufr_novosib_dbz1,bufr_vlad_dbz1";
+const WORKER =
+    "https://melorag.mmts2678.workers.dev/nowcast?url=";
+
+
+const RADAR_LAYERS =
+    "bufr_dbz1,bufr_novosib_dbz1,bufr_vlad_dbz1";
+
+
+/*
+   Тот BBOX, который мы уже проверили
+   через Nowcast.
+*/
 
 const BBOX = [
-3779329.325563706,
-6713602.321820984,
-4547368.585773157,
-8244788.872429635
+    3779329.325563706,
+    6713602.321820984,
+    4547368.585773157,
+    8244788.872429635
 ];
+
 
 const GRID = 4;
 
 
-/* Карта */
+/*
+   Интервал кадров Nowcast.
+*/
+
+const FRAME_STEP =
+    10 * 60 * 1000;
+
+
+/*
+   Максимальная история
+   в памяти браузера.
+*/
+
+const MAX_FRAMES = 60;
+
+
+/* =========================================================
+   MAP
+========================================================= */
 
 const map =
-L.map("map",{
-    zoomControl:true,
-    attributionControl:true
-});
+    L.map(
+        "map",
+        {
+            zoomControl:true,
+            attributionControl:true
+        }
+    );
+
+
+/*
+   OpenStreetMap.
+   API KEY НЕ НУЖЕН.
+*/
 
 L.tileLayer(
-"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-{
-    maxZoom:19,
-    attribution:"© OpenStreetMap © CARTO"
-}
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+
+        attribution:
+            "© OpenStreetMap contributors"
+    }
 ).addTo(map);
 
+
+/*
+   Стартовый вид России.
+*/
+
 map.setView(
-[57,80],
-4
+    [57,80],
+    3
 );
 
 
-/* Элементы */
+/* =========================================================
+   UI
+========================================================= */
 
-const status =
-document.getElementById("status");
+const statusText =
+    document.getElementById(
+        "statusText"
+    );
 
-const dot =
-document.getElementById("dot");
+
+const statusDot =
+    document.getElementById(
+        "statusDot"
+    );
+
 
 const loading =
-document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
-const timeBox =
-document.getElementById("time");
 
-const countBox =
-document.getElementById("count");
+const timeMain =
+    document.getElementById(
+        "timeMain"
+    );
+
+
+const timeCount =
+    document.getElementById(
+        "timeCount"
+    );
+
 
 const slider =
-document.getElementById("slider");
+    document.getElementById(
+        "timelineSlider"
+    );
+
 
 const radarToggle =
-document.getElementById("radar");
+    document.getElementById(
+        "radarToggle"
+    );
 
 
-let radarLayer =
-null;
+/* =========================================================
+   STATE
+========================================================= */
 
-let currentBlob =
-null;
+let frames = [];
+
+let currentIndex = -1;
+
+let radarLayer = null;
+
+let currentObjectURL = null;
+
+let playing = false;
+
+let playTimer = null;
 
 
-/* Статус */
+/* =========================================================
+   STATUS
+========================================================= */
 
 function setStatus(
-text,
-ok=false
+    text,
+    type = "loading"
 ){
 
-    status.textContent =
-    text;
+    statusText.textContent =
+        text;
 
-    dot.className =
-    "dot " +
-    (ok ? "ok" : "load");
-
+    statusDot.className =
+        "status-dot " +
+        type;
 }
 
 
-/* Время */
+/* =========================================================
+   LOADING
+========================================================= */
 
-function formatTime(
-time
+function setLoading(
+    visible,
+    text
 ){
 
-    return new Date(
-        time
-    ).toLocaleString(
+    if(text){
+
+        loading.textContent =
+            text;
+
+    }
+
+    loading.classList.toggle(
+        "hidden",
+        !visible
+    );
+}
+
+
+/* =========================================================
+   TIME
+========================================================= */
+
+function formatTime(
+    iso
+){
+
+    const date =
+        new Date(
+            iso
+        );
+
+    return date.toLocaleString(
         "ru-RU",
         {
             day:"2-digit",
             month:"2-digit",
+            year:"numeric",
+
             hour:"2-digit",
             minute:"2-digit",
+
             timeZone:"UTC"
         }
     ) + " UTC";
-
 }
 
 
-/* Получение токена
-   теперь НЕ из браузера,
-   а только через Worker
-*/
+/* =========================================================
+   ROUND TIME TO 10 MIN
+========================================================= */
 
-async function getRadar(
-time
+function roundRadarTime(){
+
+    const date =
+        new Date();
+
+    date.setUTCSeconds(
+        0,
+        0
+    );
+
+    date.setUTCMinutes(
+        Math.floor(
+            date.getUTCMinutes() /
+            10
+        ) * 10
+    );
+
+    return date
+        .toISOString()
+        .replace(
+            ".000Z",
+            "Z"
+        );
+}
+
+
+/* =========================================================
+   CREATE GETMAP URL
+========================================================= */
+
+function createGetMapURL(
+    time,
+    bbox
 ){
 
     const url =
-    new URL(
-        "https://www.nowcast.ru/baltrad_wsgi"
-    );
+        new URL(
+            "https://www.nowcast.ru/baltrad_wsgi"
+        );
+
 
     url.searchParams.set(
         "REQUEST",
         "GetMap"
     );
 
+
     url.searchParams.set(
         "SERVICE",
         "WMS"
     );
+
 
     url.searchParams.set(
         "VERSION",
         "1.3.0"
     );
 
+
     url.searchParams.set(
         "FORMAT",
         "image/png"
     );
+
 
     url.searchParams.set(
         "STYLES",
         ""
     );
 
+
     url.searchParams.set(
         "TRANSPARENT",
         "TRUE"
     );
 
+
     url.searchParams.set(
         "LAYERS",
-        LAYERS
+        RADAR_LAYERS
     );
+
 
     url.searchParams.set(
         "TIME",
         time
     );
 
+
     url.searchParams.set(
         "FORMAT_OPTIONS",
         "dpi:270"
     );
+
 
     url.searchParams.set(
         "WIDTH",
         "942"
     );
 
+
     url.searchParams.set(
         "HEIGHT",
         "1878"
     );
+
 
     url.searchParams.set(
         "CRS",
         "EPSG:3857"
     );
 
+
+    url.searchParams.set(
+        "BBOX",
+        bbox.join(",")
+    );
+
+
+    return url.toString();
+}
+
+
+/* =========================================================
+   LOAD ONE TILE
+========================================================= */
+
+async function loadTile(
+    url
+){
+
+    const response =
+        await fetch(
+            WORKER +
+            encodeURIComponent(
+                url
+            )
+        );
+
+
+    if(!response.ok){
+
+        throw new Error(
+            "Worker HTTP " +
+            response.status
+        );
+
+    }
+
+
+    const blob =
+        await response.blob();
+
+
+    if(
+        !blob.type.includes(
+            "image"
+        )
+    ){
+
+        throw new Error(
+            "Nowcast вернул " +
+            blob.type
+        );
+
+    }
+
+
+    return createImageBitmap(
+        blob
+    );
+}
+
+
+/* =========================================================
+   LOAD 4×4 FRAME
+========================================================= */
+
+async function loadFrame(
+    time
+){
 
     const [
         x1,
@@ -593,144 +1149,251 @@ time
 
 
     const dx =
-    (x2-x1)/GRID;
+        (x2 - x1) /
+        GRID;
+
 
     const dy =
-    (y2-y1)/GRID;
+        (y2 - y1) /
+        GRID;
 
 
-    const requests=[];
+    const requests = [];
 
+
+    /*
+       Формируем 16 запросов.
+    */
 
     for(
-        let y=0;
-        y<GRID;
+        let y = 0;
+        y < GRID;
         y++
     ){
 
         for(
-            let x=0;
-            x<GRID;
+            let x = 0;
+            x < GRID;
             x++
         ){
 
-            const tile =
-            new URL(
-                url
-            );
+            const tileBBox = [
 
-            tile.searchParams.set(
-                "BBOX",
-                [
-                    x1+x*dx,
-                    y1+y*dy,
-                    x1+(x+1)*dx,
-                    y1+(y+1)*dy
-                ].join(",")
-            );
+                x1 + x * dx,
+                y1 + y * dy,
+
+                x1 + (x + 1) * dx,
+                y1 + (y + 1) * dy
+
+            ];
+
+
+            const url =
+                createGetMapURL(
+                    time,
+                    tileBBox
+                );
+
 
             requests.push(
-                fetch(
-                    WORKER +
-                    encodeURIComponent(
-                        tile.href
-                    )
-                ).then(
-                    r=>{
-                        if(!r.ok)
-                            throw new Error(
-                                "Worker "+r.status
-                            );
-
-                        return r.blob();
-                    }
+                loadTile(
+                    url
                 )
             );
 
         }
-
     }
 
 
-    const blobs =
-    await Promise.all(
-        requests
-    );
-
+    /*
+       Загружаем 16 одновременно.
+    */
 
     const images =
-    await Promise.all(
-        blobs.map(
-            b=>createImageBitmap(b)
-        )
-    );
+        await Promise.all(
+            requests
+        );
 
 
-    const tw =
-    images[0].width;
+    const tileWidth =
+        images[0].width;
 
-    const th =
-    images[0].height;
+
+    const tileHeight =
+        images[0].height;
 
 
     const canvas =
-    document.createElement(
-        "canvas"
-    );
+        document.createElement(
+            "canvas"
+        );
+
 
     canvas.width =
-    tw*GRID;
+        tileWidth * GRID;
+
 
     canvas.height =
-    th*GRID;
+        tileHeight * GRID;
 
 
     const ctx =
-    canvas.getContext(
-        "2d"
-    );
+        canvas.getContext(
+            "2d"
+        );
 
+
+    /*
+       Склеиваем 4×4.
+    */
 
     images.forEach(
-        (img,i)=>{
+        (
+            image,
+            index
+        ) => {
 
             const x =
-            i%GRID;
+                index % GRID;
+
 
             const y =
-            Math.floor(
-                i/GRID
-            );
+                Math.floor(
+                    index / GRID
+                );
+
 
             ctx.drawImage(
-                img,
-                x*tw,
-                y*th
+                image,
+
+                x * tileWidth,
+                y * tileHeight
             );
 
-            img.close();
+
+            image.close();
 
         }
     );
 
 
     return new Promise(
-        resolve=>
-        canvas.toBlob(
+        (
             resolve,
-            "image/png"
-        )
-    );
+            reject
+        ) => {
 
+            canvas.toBlob(
+                blob => {
+
+                    if(blob){
+
+                        resolve(
+                            blob
+                        );
+
+                    }else{
+
+                        reject(
+                            new Error(
+                                "Не удалось создать PNG"
+                            )
+                        );
+
+                    }
+
+                },
+
+                "image/png"
+            );
+
+        }
+    );
 }
 
 
-/* Показ радара */
+/* =========================================================
+   SAVE FRAME
+========================================================= */
 
-function showRadar(
-blob,
-time
+function saveFrame(
+time,
+blob
 ){
+
+    /*
+       Не дублируем кадр.
+    */
+
+    if(
+        frames.some(
+            frame =>
+                frame.time === time
+        )
+    ){
+
+        return;
+
+    }
+
+
+    frames.push({
+        time:time,
+        blob:blob
+    });
+
+
+    frames.sort(
+        (
+            a,
+            b
+        ) =>
+            new Date(a.time) -
+            new Date(b.time)
+    );
+
+
+    /*
+       Удаляем самый старый,
+       если достигнут лимит.
+    */
+
+    while(
+        frames.length >
+        MAX_FRAMES
+    ){
+
+        frames.shift();
+
+    }
+}
+
+
+/* =========================================================
+   SHOW FRAME
+========================================================= */
+
+function showFrame(
+index
+){
+
+    if(
+        index < 0 ||
+        index >= frames.length
+    ){
+
+        return;
+
+    }
+
+
+    currentIndex =
+        index;
+
+
+    const frame =
+        frames[index];
+
 
     if(radarLayer){
 
@@ -740,185 +1403,428 @@ time
 
     }
 
-    if(currentBlob){
+
+    if(currentObjectURL){
 
         URL.revokeObjectURL(
-            currentBlob
+            currentObjectURL
         );
 
     }
 
-    currentBlob =
-    URL.createObjectURL(
-        blob
-    );
+
+    currentObjectURL =
+        URL.createObjectURL(
+            frame.blob
+        );
 
 
     /*
-      Географическая область
-      соответствует текущему BBOX.
+       Географические границы
+       текущей области.
+
+       Приближённая привязка
+       для нашего текущего BBOX.
     */
 
     radarLayer =
-    L.imageOverlay(
-        currentBlob,
-        [
-            [54.7,33.9],
-            [66.8,40.8]
-        ],
-        {
-            opacity:.9,
-            interactive:false
-        }
-    ).addTo(map);
+        L.imageOverlay(
+            currentObjectURL,
+
+            [
+                [54.7,33.9],
+                [66.8,40.8]
+            ],
+
+            {
+                opacity:.90,
+                interactive:false
+            }
+        );
 
 
-    timeBox.textContent =
-    formatTime(
-        time
-    );
+    if(
+        radarToggle.checked
+    ){
 
-    countBox.textContent =
-    "Nowcast DBZ";
+        radarLayer.addTo(
+            map
+        );
 
+    }
+
+
+    timeMain.textContent =
+        formatTime(
+            frame.time
+        );
+
+
+    timeCount.textContent =
+        (
+            index + 1
+        ) +
+        " / " +
+        frames.length +
+        " кадров";
+
+
+    slider.max =
+        Math.max(
+            0,
+            frames.length - 1
+        );
+
+
+    slider.value =
+        index;
 }
 
 
-/* Текущий кадр */
+/* =========================================================
+   LOAD CURRENT
+========================================================= */
 
 async function loadCurrent(){
 
     try{
 
-        loading.classList.remove(
-            "hidden"
+        setLoading(
+            true,
+            "Получение Nowcast..."
         );
 
-        loading.textContent =
-        "Получение Nowcast...";
 
         setStatus(
             "Загрузка...",
-            false
+            "loading"
         );
 
 
-        const now =
-        new Date();
-
-
-        now.setUTCSeconds(
-            0,
-            0
-        );
-
-        now.setUTCMinutes(
-            Math.floor(
-                now.getUTCMinutes()/10
-            )*10
-        );
-
-
-        const iso =
-        now.toISOString()
-        .replace(
-            ".000Z",
-            "Z"
-        );
+        const time =
+            roundRadarTime();
 
 
         const blob =
-        await getRadar(
-            iso
+            await loadFrame(
+                time
+            );
+
+
+        saveFrame(
+            time,
+            blob
         );
 
 
-        showRadar(
-            blob,
-            iso
+        const index =
+            frames.findIndex(
+                frame =>
+                    frame.time === time
+            );
+
+
+        showFrame(
+            index
         );
 
 
-        slider.max=0;
-        slider.value=0;
+        setLoading(
+            false
+        );
 
 
         setStatus(
             "Nowcast подключён",
-            true
+            "ok"
         );
 
 
-        loading.classList.add(
-            "hidden"
+    }catch(error){
+
+        console.error(
+            error
         );
 
 
-    }catch(e){
+        setLoading(
+            true,
 
-        console.error(e);
+            "Ошибка: " +
+            error.message
+        );
+
 
         setStatus(
             "Ошибка загрузки",
-            false
+            "error"
         );
 
-        loading.textContent =
-        "Ошибка: " +
-        e.message;
-
     }
-
 }
 
 
-/* Кнопки */
+/* =========================================================
+   SLIDER
+========================================================= */
+
+slider.addEventListener(
+    "input",
+    () => {
+
+        showFrame(
+            Number(
+                slider.value
+            )
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
 
 document.getElementById(
-"refresh"
+    "previousButton"
 ).onclick =
-loadCurrent;
+() => {
+
+    if(!frames.length)
+        return;
 
 
-document.getElementById(
-"russia"
-).onclick =
-()=>{
-    map.setView(
-        [58,90],
-        3
+    showFrame(
+        Math.max(
+            0,
+            currentIndex - 1
+        )
     );
+
 };
 
 
+/* =========================================================
+   NEXT
+========================================================= */
+
+document.getElementById(
+    "nextButton"
+).onclick =
+() => {
+
+    if(!frames.length)
+        return;
+
+
+    showFrame(
+        Math.min(
+            frames.length - 1,
+            currentIndex + 1
+        )
+    );
+
+};
+
+
+/* =========================================================
+   PLAY
+========================================================= */
+
+document.getElementById(
+    "playButton"
+).onclick =
+() => {
+
+    if(
+        frames.length < 2
+    ){
+
+        return;
+
+    }
+
+
+    if(playing){
+
+        playing =
+            false;
+
+
+        clearInterval(
+            playTimer
+        );
+
+
+        document.getElementById(
+            "playButton"
+        ).textContent =
+            "▶ Воспроизвести";
+
+
+        return;
+
+    }
+
+
+    playing =
+        true;
+
+
+    document.getElementById(
+        "playButton"
+    ).textContent =
+        "⏸ Пауза";
+
+
+    playTimer =
+        setInterval(
+            () => {
+
+                let next =
+                    currentIndex + 1;
+
+
+                if(
+                    next >=
+                    frames.length
+                ){
+
+                    next = 0;
+
+                }
+
+
+                showFrame(
+                    next
+                );
+
+            },
+
+            700
+        );
+
+};
+
+
+/* =========================================================
+   RADAR SWITCH
+========================================================= */
+
 radarToggle.onchange =
-()=>{
+() => {
 
     if(!radarLayer)
         return;
 
+
     if(
         radarToggle.checked
-    )
-        radarLayer.addTo(map);
-    else
+    ){
+
+        radarLayer.addTo(
+            map
+        );
+
+    }else{
+
         map.removeLayer(
             radarLayer
         );
 
+    }
+
 };
 
 
-/* Первый запуск */
+/* =========================================================
+   REFRESH
+========================================================= */
+
+document.getElementById(
+    "refreshButton"
+).onclick =
+loadCurrent;
+
+
+/* =========================================================
+   RUSSIA
+========================================================= */
+
+document.getElementById(
+    "russiaButton"
+).onclick =
+() => {
+
+    map.setView(
+        [58,90],
+        3
+    );
+
+};
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+document.getElementById(
+    "locationButton"
+).onclick =
+() => {
+
+    map.locate({
+        setView:true,
+        maxZoom:9
+    });
+
+};
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
+
+document.getElementById(
+    "fullscreenButton"
+).onclick =
+() => {
+
+    if(
+        document.fullscreenElement
+    ){
+
+        document.exitFullscreen();
+
+    }else{
+
+        document.documentElement
+            .requestFullscreen()
+            .catch(
+                () => {}
+            );
+
+    }
+
+};
+
+
+/* =========================================================
+   START
+========================================================= */
 
 loadCurrent();
 
 
-/* Автообновление */
+/*
+   Проверяем новый кадр
+   каждую минуту.
+*/
 
 setInterval(
-loadCurrent,
-60000
+    loadCurrent,
+    60 * 1000
 );
 
 </script>
