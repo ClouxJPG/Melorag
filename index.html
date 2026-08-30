@@ -2,7 +2,12 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1,
+      maximum-scale=1,
+      user-scalable=no">
 
 <title>NOWCAST RADAR</title>
 
@@ -10,23 +15,37 @@
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
-html,body,#map{
+html,
+body,
+#map{
     width:100%;
     height:100%;
     overflow:hidden;
 }
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
     background:#10151c;
-    color:#fff;
+    color:white;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
+
+
+/* =========================
+   MAP
+========================= */
 
 #map{
     position:absolute;
@@ -34,203 +53,296 @@ body{
 }
 
 
-/* ---------- TOP ---------- */
+/* =========================
+   TOP
+========================= */
 
 .topbar{
+
     position:absolute;
+
     z-index:2000;
 
     top:12px;
-    left:50%;
-    transform:translateX(-50%);
 
-    width:min(720px,calc(100% - 24px));
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:min(
+        720px,
+        calc(100% - 24px)
+    );
 
     min-height:52px;
 
     padding:8px 13px;
 
     display:flex;
+
     align-items:center;
+
     gap:12px;
 
-    background:rgba(12,16,22,.94);
+    background:
+        rgba(12,16,22,.94);
 
-    border:1px solid rgba(255,255,255,.11);
+    border:
+        1px solid
+        rgba(255,255,255,.11);
+
     border-radius:15px;
 
     backdrop-filter:blur(15px);
 
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.35);
 }
 
 .logo{
+
     font-size:16px;
+
     font-weight:800;
+
     white-space:nowrap;
 }
 
 .connection{
+
     margin-left:auto;
 
     display:flex;
+
     align-items:center;
+
     gap:7px;
 
     font-size:12px;
+
     color:#aeb8c6;
 }
 
 .status-dot{
+
     width:8px;
     height:8px;
+
     border-radius:50%;
+
     background:#f1b64a;
 }
 
 .status-dot.ok{
+
     background:#38d477;
-    box-shadow:0 0 10px rgba(56,212,119,.8);
+
+    box-shadow:
+        0 0 10px
+        rgba(56,212,119,.8);
 }
 
 .status-dot.error{
+
     background:#ff4c4c;
 }
 
 
-/* ---------- RIGHT PANEL ---------- */
+/* =========================
+   PANEL
+========================= */
 
 .panel{
+
     position:absolute;
+
     z-index:2000;
 
     top:76px;
+
     right:12px;
 
     width:235px;
 
     padding:12px;
 
-    background:rgba(12,16,22,.94);
+    background:
+        rgba(12,16,22,.94);
 
-    border:1px solid rgba(255,255,255,.10);
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
     border-radius:15px;
 
     backdrop-filter:blur(15px);
 
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.35);
 }
 
 .panel-title{
+
     font-size:14px;
+
     font-weight:750;
+
     margin-bottom:9px;
 }
 
 .layer{
+
     display:flex;
+
     align-items:center;
+
     gap:9px;
 
     padding:10px;
 
-    background:rgba(255,255,255,.055);
+    background:
+        rgba(255,255,255,.055);
 
     border-radius:9px;
 }
 
 .layer input{
+
     width:18px;
     height:18px;
 }
 
 .layer-name{
+
     font-size:13px;
+
     font-weight:700;
 }
 
 .layer-desc{
+
     margin-top:2px;
+
     font-size:10px;
+
     color:#8e99a8;
 }
 
 .buttons{
+
     display:flex;
+
     gap:6px;
+
     margin-top:8px;
 }
 
 button{
+
     flex:1;
 
     height:34px;
 
     border:0;
+
     border-radius:9px;
 
     background:#272f39;
+
     color:white;
 
     font-size:12px;
+
     font-weight:700;
 }
 
 button.primary{
+
     background:#315eea;
 }
 
 
-/* ---------- TIMELINE ---------- */
+/* =========================
+   TIMELINE
+========================= */
 
 .timeline{
+
     position:absolute;
+
     z-index:2000;
 
     bottom:12px;
-    left:50%;
-    transform:translateX(-50%);
 
-    width:min(850px,calc(100% - 24px));
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:min(
+        850px,
+        calc(100% - 24px)
+    );
 
     padding:11px 13px;
 
-    background:rgba(12,16,22,.95);
+    background:
+        rgba(12,16,22,.95);
 
-    border:1px solid rgba(255,255,255,.10);
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
     border-radius:15px;
 
     backdrop-filter:blur(15px);
 
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.35);
 }
 
 .time-row{
+
     display:flex;
-    justify-content:space-between;
+
+    justify-content:
+        space-between;
+
     align-items:center;
 
     margin-bottom:5px;
 }
 
 .time{
+
     font-size:13px;
+
     font-weight:750;
 }
 
 .frames{
+
     color:#8995a4;
+
     font-size:11px;
 }
 
 
-/* ---------- SHORT + THICK SLIDER ---------- */
+/* =========================
+   КОРОТКИЙ + ТОЛСТЫЙ
+========================= */
 
 #slider{
+
     appearance:none;
+
     -webkit-appearance:none;
 
-    width:70%;
+    width:62%;
 
     height:34px;
 
@@ -244,6 +356,7 @@ button.primary{
 }
 
 #slider::-webkit-slider-runnable-track{
+
     height:16px;
 
     border-radius:16px;
@@ -252,10 +365,13 @@ button.primary{
 }
 
 #slider::-webkit-slider-thumb{
+
     -webkit-appearance:none;
+
     appearance:none;
 
     width:32px;
+
     height:32px;
 
     margin-top:-8px;
@@ -264,12 +380,16 @@ button.primary{
 
     background:#4775ff;
 
-    border:2px solid #fff;
+    border:
+        2px solid white;
 
-    box-shadow:0 2px 10px rgba(0,0,0,.55);
+    box-shadow:
+        0 2px 10px
+        rgba(0,0,0,.55);
 }
 
 #slider::-moz-range-track{
+
     height:16px;
 
     border-radius:16px;
@@ -278,57 +398,79 @@ button.primary{
 }
 
 #slider::-moz-range-thumb{
+
     width:32px;
+
     height:32px;
 
     border-radius:50%;
 
     background:#4775ff;
 
-    border:2px solid #fff;
+    border:
+        2px solid white;
 }
 
 
-/* ---------- CONTROLS ---------- */
+/* =========================
+   CONTROLS
+========================= */
 
 .controls{
+
     display:flex;
+
     gap:6px;
+
     margin-top:6px;
 }
 
 .controls button{
+
     height:36px;
 }
 
 .play{
+
     flex:1;
+
     background:#315eea;
 }
 
 
-/* ---------- LOADING ---------- */
+/* =========================
+   LOADING
+========================= */
 
 .loading{
+
     position:absolute;
+
     z-index:3000;
 
     top:50%;
+
     left:50%;
 
-    transform:translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
-    max-width:calc(100% - 40px);
+    max-width:
+        calc(100% - 40px);
 
-    padding:12px 18px;
+    padding:
+        12px 18px;
 
     border-radius:11px;
 
-    background:rgba(7,10,14,.95);
+    background:
+        rgba(7,10,14,.95);
 
     font-size:13px;
 
-    box-shadow:0 8px 30px rgba(0,0,0,.4);
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.4);
 }
 
 .hidden{
@@ -336,13 +478,15 @@ button.primary{
 }
 
 
-/* ---------- MOBILE ---------- */
-
 @media(max-width:600px){
 
     .topbar{
+
         top:8px;
-        width:calc(100% - 16px);
+
+        width:
+            calc(100% - 16px);
+
         min-height:46px;
     }
 
@@ -355,19 +499,27 @@ button.primary{
     }
 
     .panel{
+
         top:64px;
+
         right:8px;
+
         width:205px;
     }
 
     .timeline{
+
         bottom:8px;
-        width:calc(100% - 16px);
-        padding:9px 10px;
+
+        width:
+            calc(100% - 16px);
+
+        padding:
+            9px 10px;
     }
 
     #slider{
-        width:62%;
+        width:60%;
     }
 }
 
@@ -377,14 +529,13 @@ button.primary{
         display:none;
     }
 
-    .panel{
-        width:195px;
-    }
 }
+
 </style>
 </head>
 
 <body>
+
 
 <div id="map"></div>
 
@@ -513,45 +664,34 @@ button.primary{
 </div>
 
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 
 <script>
 
 /* =========================================================
-   НАСТРОЙКИ
+   CONFIG
 ========================================================= */
 
 const WORKER =
     "https://melorag.mmts2678.workers.dev/?url=";
-
-
-/*
- * Реальные слои из твоего рабочего GetMap.
- */
 
 const LAYERS =
     "bufr_dbz1,bufr_novosib_dbz1,bufr_vlad_dbz1";
 
 
 /*
- * Твой подтверждённый рабочий BBOX.
+ * Размер PNG.
+ *
+ * Сохраняем пропорции
+ * текущего окна карты.
  */
 
-const BBOX = [
-    3779329.325563706,
-    6713602.321820984,
-    4547368.585773157,
-    8244788.872429635
-];
+const IMAGE_WIDTH = 942;
 
-
-/*
- * Последнее время, которое ты подтвердил
- * как рабочее.
- */
-
-const TEST_TIME =
-    "2026-08-30T11:40:00Z";
+const IMAGE_HEIGHT = 1878;
 
 
 /* =========================================================
@@ -571,6 +711,7 @@ L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
         maxZoom:19,
+
         attribution:
             "© OpenStreetMap contributors"
     }
@@ -578,11 +719,11 @@ L.tileLayer(
 
 
 /*
- * Сначала показываем область радара.
+ * Россия.
  */
 
 map.setView(
-    [55,60],
+    [58,90],
     3
 );
 
@@ -592,25 +733,39 @@ map.setView(
 ========================================================= */
 
 const status =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const statusDot =
-    document.getElementById("statusDot");
+    document.getElementById(
+        "statusDot"
+    );
 
 const loading =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
 const timeBox =
-    document.getElementById("time");
+    document.getElementById(
+        "time"
+    );
 
 const framesBox =
-    document.getElementById("frames");
+    document.getElementById(
+        "frames"
+    );
 
 const slider =
-    document.getElementById("slider");
+    document.getElementById(
+        "slider"
+    );
 
 const radarToggle =
-    document.getElementById("radarToggle");
+    document.getElementById(
+        "radarToggle"
+    );
 
 
 /* =========================================================
@@ -636,7 +791,7 @@ let playTimer = null;
 
 function setStatus(
     text,
-    type = ""
+    state = ""
 ){
 
     status.textContent =
@@ -644,70 +799,159 @@ function setStatus(
 
     statusDot.className =
         "status-dot " +
-        type;
+        state;
 }
 
 
 /* =========================================================
-   MERCATOR
+   TIME
 ========================================================= */
 
-function mercatorXToLon(x){
+function getNowcastTime(){
 
-    return (
-        x /
-        20037508.342789244
-    ) * 180;
+    const d =
+        new Date();
+
+
+    d.setUTCSeconds(
+        0,
+        0
+    );
+
+
+    /*
+     * Nowcast имеет
+     * десятиминутный шаг.
+     */
+
+    d.setUTCMinutes(
+
+        Math.floor(
+            d.getUTCMinutes() / 10
+        ) * 10
+
+    );
+
+
+    return d
+        .toISOString()
+        .replace(
+            ".000Z",
+            "Z"
+        );
 }
 
 
-function mercatorYToLat(y){
+/* =========================================================
+   MAP BOUNDS → EPSG:3857
+========================================================= */
+
+function lonToMercatorX(
+    lon
+){
 
     return (
-        180 / Math.PI
-    ) *
-    (
-        2 *
-        Math.atan(
-            Math.exp(
-                y /
-                20037508.342789244 *
-                Math.PI /
-                180
+
+        lon *
+        20037508.342789244 /
+        180
+
+    );
+
+}
+
+
+function latToMercatorY(
+    lat
+){
+
+    const r =
+        lat *
+        Math.PI /
+        180;
+
+
+    return (
+
+        Math.log(
+            Math.tan(
+                Math.PI / 4 +
+                r / 2
             )
         )
-        -
-        Math.PI / 2
+
+        *
+
+        20037508.342789244 /
+        Math.PI
+
     );
+
+}
+
+
+/*
+ * Получаем реальный BBOX
+ * текущего окна карты.
+ */
+
+function getMapBBOX(){
+
+    const bounds =
+        map.getBounds();
+
+
+    const west =
+        bounds.getWest();
+
+    const south =
+        bounds.getSouth();
+
+    const east =
+        bounds.getEast();
+
+    const north =
+        bounds.getNorth();
+
+
+    return {
+
+        minX:
+            lonToMercatorX(
+                west
+            ),
+
+        minY:
+            latToMercatorY(
+                south
+            ),
+
+        maxX:
+            lonToMercatorX(
+                east
+            ),
+
+        maxY:
+            latToMercatorY(
+                north
+            )
+
+    };
+
 }
 
 
 /* =========================================================
-   RADAR BOUNDS
+   GETMAP
 ========================================================= */
 
-function getRadarBounds(){
+function makeGetMapURL(
+    time
+){
 
-    return L.latLngBounds(
+    const b =
+        getMapBBOX();
 
-        [
-            mercatorYToLat(BBOX[1]),
-            mercatorXToLon(BBOX[0])
-        ],
-
-        [
-            mercatorYToLat(BBOX[3]),
-            mercatorXToLon(BBOX[2])
-        ]
-    );
-}
-
-
-/* =========================================================
-   GETMAP URL
-========================================================= */
-
-function makeGetMapURL(time){
 
     const u =
         new URL(
@@ -762,12 +1006,12 @@ function makeGetMapURL(time){
 
     u.searchParams.set(
         "WIDTH",
-        "942"
+        IMAGE_WIDTH
     );
 
     u.searchParams.set(
         "HEIGHT",
-        "1878"
+        IMAGE_HEIGHT
     );
 
     u.searchParams.set(
@@ -777,16 +1021,27 @@ function makeGetMapURL(time){
 
     u.searchParams.set(
         "BBOX",
-        BBOX.join(",")
+
+        [
+            b.minX,
+            b.minY,
+            b.maxX,
+            b.maxY
+        ].join(",")
+
     );
 
 
-    return u.toString();
+    return {
+        url:u.toString(),
+        bbox:b
+    };
+
 }
 
 
 /* =========================================================
-   LOAD RADAR
+   LOAD
 ========================================================= */
 
 async function loadRadar(){
@@ -798,46 +1053,43 @@ async function loadRadar(){
         );
 
         loading.textContent =
-            "Получение радарного PNG...";
+            "Получение Nowcast...";
 
         setStatus(
             "Загрузка..."
         );
 
 
-        /*
-         * Используем подтверждённое
-         * рабочее время.
-         *
-         * Это важно для первой проверки.
-         */
-
         const time =
-            TEST_TIME;
+            getNowcastTime();
 
 
-        const targetURL =
+        const request =
             makeGetMapURL(
                 time
             );
 
 
+        console.log(
+            "NOWCAST TIME:",
+            time
+        );
+
+        console.log(
+            "NOWCAST BBOX:",
+            request.bbox
+        );
+
+
+        /*
+         * Worker → Nowcast.
+         */
+
         const workerURL =
             WORKER +
             encodeURIComponent(
-                targetURL
+                request.url
             );
-
-
-        console.log(
-            "NOWCAST TARGET:",
-            targetURL
-        );
-
-        console.log(
-            "WORKER:",
-            workerURL
-        );
 
 
         const response =
@@ -858,18 +1110,19 @@ async function loadRadar(){
 
         if(!response.ok){
 
-            const errorText =
+            const error =
                 await response.text();
 
             throw new Error(
-                "Worker HTTP " +
+                "HTTP " +
                 response.status +
                 ": " +
-                errorText.slice(
+                error.slice(
                     0,
                     250
                 )
             );
+
         }
 
 
@@ -879,15 +1132,14 @@ async function loadRadar(){
             ) || "";
 
 
+        const blob =
+            await response.blob();
+
+
         console.log(
             "TYPE:",
             contentType
         );
-
-
-        const blob =
-            await response.blob();
-
 
         console.log(
             "PNG:",
@@ -895,12 +1147,6 @@ async function loadRadar(){
             "bytes"
         );
 
-
-        /*
-         * Защита от ситуации,
-         * когда Worker вернул JSON/HTML
-         * вместо картинки.
-         */
 
         if(
             !contentType.includes("image") &&
@@ -911,32 +1157,48 @@ async function loadRadar(){
                 await blob.text();
 
             throw new Error(
-                "Вместо PNG получено " +
-                (blob.type || contentType) +
-                ": " +
+                "Получен не PNG: " +
                 text.slice(
                     0,
                     250
                 )
             );
+
         }
 
 
         /*
-         * Добавляем кадр.
+         * Запоминаем кадр
+         * вместе с его BBOX.
          */
 
-        frames = [
+        frames.push({
 
-            {
-                time:time,
-                blob:blob
-            }
+            time:time,
 
-        ];
+            blob:blob,
+
+            bbox:request.bbox
+
+        });
 
 
-        showFrame(0);
+        /*
+         * Максимум 60 кадров.
+         */
+
+        while(
+            frames.length > 60
+        ){
+
+            frames.shift();
+
+        }
+
+
+        showFrame(
+            frames.length - 1
+        );
 
 
         setStatus(
@@ -968,18 +1230,97 @@ async function loadRadar(){
             "Ошибка: " +
             error.message;
 
-        loading.classList.remove(
-            "hidden"
-        );
     }
+
 }
 
 
 /* =========================================================
-   SHOW PNG
+   BBOX → LEAFLET
 ========================================================= */
 
-function showFrame(index){
+function bboxToBounds(
+    bbox
+){
+
+    return L.latLngBounds(
+
+        [
+            mercatorYToLat(
+                bbox.minY
+            ),
+
+            mercatorXToLon(
+                bbox.minX
+            )
+        ],
+
+        [
+            mercatorYToLat(
+                bbox.maxY
+            ),
+
+            mercatorXToLon(
+                bbox.maxX
+            )
+        ]
+
+    );
+
+}
+
+
+function mercatorXToLon(
+    x
+){
+
+    return (
+        x /
+        20037508.342789244
+    ) * 180;
+
+}
+
+
+function mercatorYToLat(
+    y
+){
+
+    return (
+
+        180 /
+        Math.PI
+
+    ) *
+
+    (
+
+        2 *
+        Math.atan(
+            Math.exp(
+                y /
+                20037508.342789244 *
+                Math.PI /
+                180
+            )
+        )
+
+        -
+
+        Math.PI / 2
+
+    );
+
+}
+
+
+/* =========================================================
+   SHOW FRAME
+========================================================= */
+
+function showFrame(
+    index
+){
 
     if(
         index < 0 ||
@@ -987,6 +1328,7 @@ function showFrame(index){
     ){
 
         return;
+
     }
 
 
@@ -998,10 +1340,6 @@ function showFrame(index){
         frames[index];
 
 
-    /*
-     * Старый слой.
-     */
-
     if(radarLayer){
 
         map.removeLayer(
@@ -1009,12 +1347,9 @@ function showFrame(index){
         );
 
         radarLayer = null;
+
     }
 
-
-    /*
-     * Старый URL.
-     */
 
     if(objectURL){
 
@@ -1023,13 +1358,9 @@ function showFrame(index){
         );
 
         objectURL = null;
+
     }
 
-
-    /*
-     * Создаём URL
-     * настоящего PNG.
-     */
 
     objectURL =
         URL.createObjectURL(
@@ -1038,28 +1369,33 @@ function showFrame(index){
 
 
     const bounds =
-        getRadarBounds();
-
-
-    console.log(
-        "RADAR BOUNDS:",
-        bounds
-    );
+        bboxToBounds(
+            frame.bbox
+        );
 
 
     /*
-     * Накладываем PNG.
+     * PNG накладывается
+     * ровно на тот BBOX,
+     * который был отправлен
+     * в Nowcast.
      */
 
     radarLayer =
         L.imageOverlay(
+
             objectURL,
+
             bounds,
+
             {
                 opacity:1,
+
                 interactive:false,
+
                 zIndex:1000
             }
+
         );
 
 
@@ -1070,52 +1406,16 @@ function showFrame(index){
         radarLayer.addTo(
             map
         );
+
     }
 
 
     /*
-     * КЛЮЧЕВОЙ МОМЕНТ:
+     * НЕ делаем fitBounds.
      *
-     * карта автоматически
-     * перемещается к PNG.
+     * Пользователь остаётся
+     * на своём месте.
      */
-
-    map.fitBounds(
-        bounds,
-        {
-            padding:[
-                40,
-                40
-            ],
-            animate:false
-        }
-    );
-
-
-    /*
-     * Проверяем,
-     * действительно ли слой добавлен.
-     */
-
-    setTimeout(
-        () => {
-
-            console.log(
-                "RADAR LAYER:",
-                radarLayer
-            );
-
-            console.log(
-                "MAP HAS LAYER:",
-                radarLayer &&
-                map.hasLayer(
-                    radarLayer
-                )
-            );
-
-        },
-        100
-    );
 
 
     timeBox.textContent =
@@ -1148,6 +1448,7 @@ function showFrame(index){
 
     slider.value =
         index;
+
 }
 
 
@@ -1164,12 +1465,13 @@ slider.addEventListener(
                 slider.value
             )
         );
+
     }
 );
 
 
 /* =========================================================
-   PREVIOUS
+   PREV
 ========================================================= */
 
 document.getElementById(
@@ -1178,19 +1480,18 @@ document.getElementById(
 () => {
 
     if(
-        frames.length === 0
+        frames.length
     ){
 
-        return;
+        showFrame(
+            Math.max(
+                0,
+                currentIndex - 1
+            )
+        );
+
     }
 
-
-    showFrame(
-        Math.max(
-            0,
-            currentIndex - 1
-        )
-    );
 };
 
 
@@ -1204,19 +1505,18 @@ document.getElementById(
 () => {
 
     if(
-        frames.length === 0
+        frames.length
     ){
 
-        return;
+        showFrame(
+            Math.min(
+                frames.length - 1,
+                currentIndex + 1
+            )
+        );
+
     }
 
-
-    showFrame(
-        Math.min(
-            frames.length - 1,
-            currentIndex + 1
-        )
-    );
 };
 
 
@@ -1234,6 +1534,7 @@ document.getElementById(
     ){
 
         return;
+
     }
 
 
@@ -1251,6 +1552,7 @@ document.getElementById(
             "▶ Воспроизвести";
 
         return;
+
     }
 
 
@@ -1276,6 +1578,7 @@ document.getElementById(
                 ){
 
                     next = 0;
+
                 }
 
 
@@ -1286,11 +1589,12 @@ document.getElementById(
             },
             700
         );
+
 };
 
 
 /* =========================================================
-   RADAR CHECKBOX
+   RADAR TOGGLE
 ========================================================= */
 
 radarToggle.onchange =
@@ -1299,6 +1603,7 @@ radarToggle.onchange =
     if(!radarLayer){
 
         return;
+
     }
 
 
@@ -1315,7 +1620,9 @@ radarToggle.onchange =
         map.removeLayer(
             radarLayer
         );
+
     }
+
 };
 
 
@@ -1338,14 +1645,35 @@ document.getElementById(
         [58,90],
         3
     );
+
 };
 
 
 /* =========================================================
-   START
+   FIRST LOAD
 ========================================================= */
 
 loadRadar();
+
+
+/*
+ * Обновление текущего кадра
+ * раз в 10 минут.
+ */
+
+setInterval(
+    loadRadar,
+    600000
+);
+
+
+/*
+ * Если пользователь двигает карту,
+ * старый PNG не перезапрашиваем.
+ *
+ * Новый BBOX используется
+ * при следующем обновлении.
+ */
 
 </script>
 
